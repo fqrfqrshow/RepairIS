@@ -42,24 +42,24 @@
 git clone https://github.com/fqrfqrshow/RepairIS.git
 cd RepairIS
 
-🛠️ Технологии
-Язык: C# 7.3 / 8.0
+## 🛠️ Технологии
 
-Платформа: .NET Framework 4.8
+- **Язык:** C# 7.3 / 8.0
+- **Платформа:** .NET Framework 4.8
+- **UI:** Windows Forms
+- **Хранение данных:** JSON + Newtonsoft.Json (Json.NET)
+- **Тестирование:** xUnit.net
 
-UI: Windows Forms
+## 📄 Лицензия
 
-Хранение данных: JSON + Newtonsoft.Json (Json.NET)
+MIT License. Подробнее в файле [LICENSE](LICENSE).
 
-Тестирование: xUnit.net
+## 👩‍💻 Автор
 
-📄 Лицензия
-MIT License. Подробнее в файле LICENSE.
-
-👩‍💻 Автор
-Д. В. Фролова
-Группа КИ24-20Б, СФУ
+**Д. В. Фролова**  
+Группа КИ24-20Б, СФУ  
 Красноярск, 2026
 
-Руководитель: В. С. Васильев
+
+Руководитель: В. С. Васильев  
 Кафедра прикладной информатики, ИКИТ, СФУ
