@@ -5,7 +5,6 @@
 [![C#](https://img.shields.io/badge/C%23-12.0-blue)](https://dotnet.microsoft.com/)
 [![.NET](https://img.shields.io/badge/.NET-4.8-purple)](https://dotnet.microsoft.com/en-us/download/dotnet-framework/net48)
 [![Windows Forms](https://img.shields.io/badge/Windows-Forms-0078D4)](https://github.com/dotnet/winforms)
-[![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 
 **RepairIS** — это desktop-приложение для автоматизации работы ремонтного предприятия. Система позволяет управлять полным циклом ремонта станков: от подачи заявки клиентом до фиксации результата мастером и формирования сметы.
 
