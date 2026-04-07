@@ -32,10 +32,6 @@
 - **Хранение данных:** JSON + Newtonsoft.Json (Json.NET)
 - **Тестирование:** xUnit.net
 
-## 📄 Лицензия
-
-MIT License. Подробнее в файле [LICENSE](LICENSE).
-
 ## 👩‍💻 Автор
 
 **Д. В. Фролова**  
