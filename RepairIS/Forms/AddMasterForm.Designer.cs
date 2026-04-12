@@ -31,7 +31,7 @@
             this.lblTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold);
             this.lblTitle.Location = new System.Drawing.Point(100, 10);
             this.lblTitle.Name = "lblTitle";
-            this.lblTitle.Size = new System.Drawing.Size(300, 30);
+            this.lblTitle.Size = new System.Drawing.Size(300, 60);
             this.lblTitle.TabIndex = 0;
             this.lblTitle.Text = "ДОБАВЛЕНИЕ МАСТЕРА";
             this.lblTitle.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -129,6 +129,7 @@
             this.Load += new System.EventHandler(this.AddMasterForm_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
+
         }
 
         private System.Windows.Forms.Label lblTitle;

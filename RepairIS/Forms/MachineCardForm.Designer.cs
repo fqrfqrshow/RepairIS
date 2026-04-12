@@ -40,7 +40,7 @@
             this.lblTitle.ForeColor = System.Drawing.Color.DarkBlue;
             this.lblTitle.Location = new System.Drawing.Point(50, 10);
             this.lblTitle.Name = "lblTitle";
-            this.lblTitle.Size = new System.Drawing.Size(550, 35);
+            this.lblTitle.Size = new System.Drawing.Size(550, 50);
             this.lblTitle.TabIndex = 0;
             this.lblTitle.Text = "КАРТОЧКА СТАНКА";
             this.lblTitle.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -50,7 +50,7 @@
             this.lblModel.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold);
             this.lblModel.Location = new System.Drawing.Point(20, 60);
             this.lblModel.Name = "lblModel";
-            this.lblModel.Size = new System.Drawing.Size(130, 30);
+            this.lblModel.Size = new System.Drawing.Size(160, 30);
             this.lblModel.TabIndex = 1;
             this.lblModel.Text = "🔧 Модель:";
             this.lblModel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -69,7 +69,7 @@
             // 
             this.lblSerial.Location = new System.Drawing.Point(20, 95);
             this.lblSerial.Name = "lblSerial";
-            this.lblSerial.Size = new System.Drawing.Size(130, 30);
+            this.lblSerial.Size = new System.Drawing.Size(130, 35);
             this.lblSerial.TabIndex = 3;
             this.lblSerial.Text = "🔢 Серийный номер:";
             this.lblSerial.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -86,7 +86,7 @@
             // 
             this.lblManufacturer.Location = new System.Drawing.Point(20, 130);
             this.lblManufacturer.Name = "lblManufacturer";
-            this.lblManufacturer.Size = new System.Drawing.Size(130, 30);
+            this.lblManufacturer.Size = new System.Drawing.Size(130, 35);
             this.lblManufacturer.TabIndex = 5;
             this.lblManufacturer.Text = "🏭 Производитель:";
             this.lblManufacturer.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -116,22 +116,12 @@
             this.lblOwnerValue.TabIndex = 8;
             this.lblOwnerValue.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
-            // lblStats
-            // 
-            this.lblStats.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Italic);
-            this.lblStats.ForeColor = System.Drawing.Color.Gray;
-            this.lblStats.Location = new System.Drawing.Point(20, 200);
-            this.lblStats.Name = "lblStats";
-            this.lblStats.Size = new System.Drawing.Size(540, 25);
-            this.lblStats.TabIndex = 9;
-            this.lblStats.Text = "Загрузка статистики...";
-            // 
             // lblHistory
             // 
             this.lblHistory.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
             this.lblHistory.Location = new System.Drawing.Point(20, 235);
             this.lblHistory.Name = "lblHistory";
-            this.lblHistory.Size = new System.Drawing.Size(180, 30);
+            this.lblHistory.Size = new System.Drawing.Size(310, 30);
             this.lblHistory.TabIndex = 10;
             this.lblHistory.Text = "📋 История ремонтов:";
             // 
@@ -141,7 +131,16 @@
             this.lblHistoryInfo.Name = "lblHistoryInfo";
             this.lblHistoryInfo.Size = new System.Drawing.Size(360, 25);
             this.lblHistoryInfo.TabIndex = 11;
-            this.lblHistoryInfo.Text = "";
+            // 
+            // lblStats
+            // 
+            this.lblStats.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Italic);
+            this.lblStats.ForeColor = System.Drawing.Color.Gray;
+            this.lblStats.Location = new System.Drawing.Point(20, 200);
+            this.lblStats.Name = "lblStats";
+            this.lblStats.Size = new System.Drawing.Size(540, 25);
+            this.lblStats.TabIndex = 9;
+            this.lblStats.Text = "Загрузка статистики...";
             // 
             // dgvHistory
             // 
@@ -154,17 +153,17 @@
             this.dgvHistory.Size = new System.Drawing.Size(580, 200);
             this.dgvHistory.TabIndex = 12;
             // 
-            // btnViewRequest
+            // btnClose
             // 
-            this.btnViewRequest.BackColor = System.Drawing.Color.LightBlue;
-            this.btnViewRequest.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnViewRequest.Location = new System.Drawing.Point(20, 490);
-            this.btnViewRequest.Name = "btnViewRequest";
-            this.btnViewRequest.Size = new System.Drawing.Size(160, 40);
-            this.btnViewRequest.TabIndex = 13;
-            this.btnViewRequest.Text = "🔍 Просмотреть заявку";
-            this.btnViewRequest.UseVisualStyleBackColor = false;
-            this.btnViewRequest.Click += new System.EventHandler(this.btnViewRequest_Click);
+            this.btnClose.BackColor = System.Drawing.Color.LightCoral;
+            this.btnClose.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnClose.Location = new System.Drawing.Point(470, 490);
+            this.btnClose.Name = "btnClose";
+            this.btnClose.Size = new System.Drawing.Size(130, 40);
+            this.btnClose.TabIndex = 15;
+            this.btnClose.Text = "❌ Закрыть";
+            this.btnClose.UseVisualStyleBackColor = false;
+            this.btnClose.Click += new System.EventHandler(this.btnClose_Click);
             // 
             // btnRefresh
             // 
@@ -178,17 +177,17 @@
             this.btnRefresh.UseVisualStyleBackColor = false;
             this.btnRefresh.Click += new System.EventHandler(this.btnRefresh_Click);
             // 
-            // btnClose
+            // btnViewRequest
             // 
-            this.btnClose.BackColor = System.Drawing.Color.LightCoral;
-            this.btnClose.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnClose.Location = new System.Drawing.Point(470, 490);
-            this.btnClose.Name = "btnClose";
-            this.btnClose.Size = new System.Drawing.Size(130, 40);
-            this.btnClose.TabIndex = 15;
-            this.btnClose.Text = "❌ Закрыть";
-            this.btnClose.UseVisualStyleBackColor = false;
-            this.btnClose.Click += new System.EventHandler(this.btnClose_Click);
+            this.btnViewRequest.BackColor = System.Drawing.Color.LightBlue;
+            this.btnViewRequest.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnViewRequest.Location = new System.Drawing.Point(20, 476);
+            this.btnViewRequest.Name = "btnViewRequest";
+            this.btnViewRequest.Size = new System.Drawing.Size(160, 54);
+            this.btnViewRequest.TabIndex = 13;
+            this.btnViewRequest.Text = "🔍 Просмотреть заявку";
+            this.btnViewRequest.UseVisualStyleBackColor = false;
+            this.btnViewRequest.Click += new System.EventHandler(this.btnViewRequest_Click);
             // 
             // MachineCardForm
             // 
@@ -215,9 +214,9 @@
             this.Name = "MachineCardForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Карточка станка";
-            
             ((System.ComponentModel.ISupportInitialize)(this.dgvHistory)).EndInit();
             this.ResumeLayout(false);
+
         }
 
         private System.Windows.Forms.Label lblTitle;

@@ -66,7 +66,6 @@
             this.lblMachineInfo.Name = "lblMachineInfo";
             this.lblMachineInfo.Size = new System.Drawing.Size(530, 25);
             this.lblMachineInfo.TabIndex = 3;
-            this.lblMachineInfo.Text = "";
             // 
             // lblClient
             // 
@@ -75,6 +74,7 @@
             this.lblClient.Size = new System.Drawing.Size(350, 25);
             this.lblClient.TabIndex = 4;
             this.lblClient.Text = "Загрузка...";
+            this.lblClient.Click += new System.EventHandler(this.lblClient_Click);
             // 
             // lblStatus
             // 
@@ -90,14 +90,13 @@
             this.lblCreatedAt.Name = "lblCreatedAt";
             this.lblCreatedAt.Size = new System.Drawing.Size(270, 25);
             this.lblCreatedAt.TabIndex = 6;
-            this.lblCreatedAt.Text = "";
             this.lblCreatedAt.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // lblDesc
             // 
             this.lblDesc.Location = new System.Drawing.Point(20, 220);
             this.lblDesc.Name = "lblDesc";
-            this.lblDesc.Size = new System.Drawing.Size(150, 30);
+            this.lblDesc.Size = new System.Drawing.Size(150, 59);
             this.lblDesc.TabIndex = 7;
             this.lblDesc.Text = "📝 Описание проблемы:";
             // 
@@ -110,17 +109,6 @@
             this.txtDescription.Size = new System.Drawing.Size(370, 80);
             this.txtDescription.TabIndex = 8;
             // 
-            // lblStatusInfo
-            // 
-            this.lblStatusInfo.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Italic);
-            this.lblStatusInfo.ForeColor = System.Drawing.Color.Red;
-            this.lblStatusInfo.Location = new System.Drawing.Point(20, 310);
-            this.lblStatusInfo.Name = "lblStatusInfo";
-            this.lblStatusInfo.Size = new System.Drawing.Size(530, 25);
-            this.lblStatusInfo.TabIndex = 9;
-            this.lblStatusInfo.Text = "";
-            this.lblStatusInfo.Visible = false;
-            // 
             // btnAccept
             // 
             this.btnAccept.BackColor = System.Drawing.Color.LightGreen;
@@ -128,19 +116,11 @@
             this.btnAccept.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
             this.btnAccept.Location = new System.Drawing.Point(20, 360);
             this.btnAccept.Name = "btnAccept";
-            this.btnAccept.Size = new System.Drawing.Size(180, 45);
+            this.btnAccept.Size = new System.Drawing.Size(180, 73);
             this.btnAccept.TabIndex = 10;
             this.btnAccept.Text = "✅ ПРИНЯТЬ В РАБОТУ";
             this.btnAccept.UseVisualStyleBackColor = false;
             this.btnAccept.Click += new System.EventHandler(this.btnAccept_Click);
-            // 
-            // cmbNewStatus
-            // 
-            this.cmbNewStatus.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbNewStatus.Location = new System.Drawing.Point(220, 365);
-            this.cmbNewStatus.Name = "cmbNewStatus";
-            this.cmbNewStatus.Size = new System.Drawing.Size(180, 24);
-            this.cmbNewStatus.TabIndex = 11;
             // 
             // btnChangeStatus
             // 
@@ -154,6 +134,14 @@
             this.btnChangeStatus.UseVisualStyleBackColor = false;
             this.btnChangeStatus.Click += new System.EventHandler(this.btnChangeStatus_Click);
             // 
+            // cmbNewStatus
+            // 
+            this.cmbNewStatus.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbNewStatus.Location = new System.Drawing.Point(220, 365);
+            this.cmbNewStatus.Name = "cmbNewStatus";
+            this.cmbNewStatus.Size = new System.Drawing.Size(180, 24);
+            this.cmbNewStatus.TabIndex = 11;
+            // 
             // btnClose
             // 
             this.btnClose.BackColor = System.Drawing.Color.LightCoral;
@@ -165,6 +153,16 @@
             this.btnClose.Text = "❌";
             this.btnClose.UseVisualStyleBackColor = false;
             this.btnClose.Click += new System.EventHandler(this.btnClose_Click);
+            // 
+            // lblStatusInfo
+            // 
+            this.lblStatusInfo.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Italic);
+            this.lblStatusInfo.ForeColor = System.Drawing.Color.Red;
+            this.lblStatusInfo.Location = new System.Drawing.Point(20, 310);
+            this.lblStatusInfo.Name = "lblStatusInfo";
+            this.lblStatusInfo.Size = new System.Drawing.Size(530, 25);
+            this.lblStatusInfo.TabIndex = 9;
+            this.lblStatusInfo.Visible = false;
             // 
             // ProcessRequestForm
             // 
@@ -191,6 +189,7 @@
             this.Text = "Обработка заявки - Менеджер";
             this.ResumeLayout(false);
             this.PerformLayout();
+
         }
 
         private System.Windows.Forms.Label lblTitle;

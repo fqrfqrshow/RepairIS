@@ -40,7 +40,7 @@
             this.lblTitle.ForeColor = System.Drawing.Color.DarkBlue;
             this.lblTitle.Location = new System.Drawing.Point(50, 10);
             this.lblTitle.Name = "lblTitle";
-            this.lblTitle.Size = new System.Drawing.Size(500, 30);
+            this.lblTitle.Size = new System.Drawing.Size(500, 40);
             this.lblTitle.TabIndex = 0;
             this.lblTitle.Text = "СМЕТА НА РЕМОНТ";
             this.lblTitle.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -54,29 +54,6 @@
             this.lblInspectionData.Size = new System.Drawing.Size(540, 70);
             this.lblInspectionData.TabIndex = 1;
             this.lblInspectionData.Text = "Загрузка данных осмотра...";
-            // 
-            // lblExistingInfo
-            // 
-            this.lblExistingInfo.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Italic);
-            this.lblExistingInfo.ForeColor = System.Drawing.Color.Gray;
-            this.lblExistingInfo.Location = new System.Drawing.Point(20, 125);
-            this.lblExistingInfo.Name = "lblExistingInfo";
-            this.lblExistingInfo.Size = new System.Drawing.Size(540, 20);
-            this.lblExistingInfo.TabIndex = 2;
-            this.lblExistingInfo.Text = "";
-            this.lblExistingInfo.Visible = false;
-            // 
-            // lblConfirmedWarning
-            // 
-            this.lblConfirmedWarning.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold);
-            this.lblConfirmedWarning.ForeColor = System.Drawing.Color.Red;
-            this.lblConfirmedWarning.Location = new System.Drawing.Point(20, 145);
-            this.lblConfirmedWarning.Name = "lblConfirmedWarning";
-            this.lblConfirmedWarning.Size = new System.Drawing.Size(540, 25);
-            this.lblConfirmedWarning.TabIndex = 3;
-            this.lblConfirmedWarning.Text = "";
-            this.lblConfirmedWarning.Visible = false;
-            this.lblConfirmedWarning.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // lblWork
             // 
@@ -99,7 +76,7 @@
             // 
             this.lblParts.Location = new System.Drawing.Point(30, 230);
             this.lblParts.Name = "lblParts";
-            this.lblParts.Size = new System.Drawing.Size(150, 30);
+            this.lblParts.Size = new System.Drawing.Size(150, 40);
             this.lblParts.TabIndex = 6;
             this.lblParts.Text = "🔩 Стоимость деталей:";
             this.lblParts.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -116,7 +93,7 @@
             // 
             this.lblLogistics.Location = new System.Drawing.Point(30, 270);
             this.lblLogistics.Name = "lblLogistics";
-            this.lblLogistics.Size = new System.Drawing.Size(150, 30);
+            this.lblLogistics.Size = new System.Drawing.Size(150, 40);
             this.lblLogistics.TabIndex = 8;
             this.lblLogistics.Text = "🚚 Логистика:";
             this.lblLogistics.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -133,7 +110,7 @@
             // 
             this.lblExtra.Location = new System.Drawing.Point(30, 310);
             this.lblExtra.Name = "lblExtra";
-            this.lblExtra.Size = new System.Drawing.Size(150, 30);
+            this.lblExtra.Size = new System.Drawing.Size(150, 25);
             this.lblExtra.TabIndex = 10;
             this.lblExtra.Text = "📦 Доп. расходы:";
             this.lblExtra.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -145,18 +122,6 @@
             this.txtExtraCost.Size = new System.Drawing.Size(150, 22);
             this.txtExtraCost.TabIndex = 11;
             this.txtExtraCost.Text = "0";
-            // 
-            // btnAutoFill
-            // 
-            this.btnAutoFill.BackColor = System.Drawing.Color.LightBlue;
-            this.btnAutoFill.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnAutoFill.Location = new System.Drawing.Point(360, 190);
-            this.btnAutoFill.Name = "btnAutoFill";
-            this.btnAutoFill.Size = new System.Drawing.Size(180, 30);
-            this.btnAutoFill.TabIndex = 12;
-            this.btnAutoFill.Text = "📋 Заполнить из осмотра";
-            this.btnAutoFill.UseVisualStyleBackColor = false;
-            this.btnAutoFill.Click += new System.EventHandler(this.btnAutoFill_Click);
             // 
             // lblTotalLabel
             // 
@@ -205,6 +170,39 @@
             this.btnCancel.UseVisualStyleBackColor = false;
             this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
             // 
+            // btnAutoFill
+            // 
+            this.btnAutoFill.BackColor = System.Drawing.Color.LightBlue;
+            this.btnAutoFill.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnAutoFill.Location = new System.Drawing.Point(360, 190);
+            this.btnAutoFill.Name = "btnAutoFill";
+            this.btnAutoFill.Size = new System.Drawing.Size(180, 34);
+            this.btnAutoFill.TabIndex = 12;
+            this.btnAutoFill.Text = "📋 Заполнить из осмотра";
+            this.btnAutoFill.UseVisualStyleBackColor = false;
+            this.btnAutoFill.Click += new System.EventHandler(this.btnAutoFill_Click);
+            // 
+            // lblExistingInfo
+            // 
+            this.lblExistingInfo.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Italic);
+            this.lblExistingInfo.ForeColor = System.Drawing.Color.Gray;
+            this.lblExistingInfo.Location = new System.Drawing.Point(20, 125);
+            this.lblExistingInfo.Name = "lblExistingInfo";
+            this.lblExistingInfo.Size = new System.Drawing.Size(540, 20);
+            this.lblExistingInfo.TabIndex = 2;
+            this.lblExistingInfo.Visible = false;
+            // 
+            // lblConfirmedWarning
+            // 
+            this.lblConfirmedWarning.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold);
+            this.lblConfirmedWarning.ForeColor = System.Drawing.Color.Red;
+            this.lblConfirmedWarning.Location = new System.Drawing.Point(20, 145);
+            this.lblConfirmedWarning.Name = "lblConfirmedWarning";
+            this.lblConfirmedWarning.Size = new System.Drawing.Size(540, 25);
+            this.lblConfirmedWarning.TabIndex = 3;
+            this.lblConfirmedWarning.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.lblConfirmedWarning.Visible = false;
+            // 
             // EstimateForm
             // 
             this.ClientSize = new System.Drawing.Size(584, 493);
@@ -233,6 +231,7 @@
             this.Text = "Формирование сметы на ремонт";
             this.ResumeLayout(false);
             this.PerformLayout();
+
         }
 
         private System.Windows.Forms.Label lblTitle;

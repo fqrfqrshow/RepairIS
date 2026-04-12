@@ -40,15 +40,6 @@
             this.lblTitle.Text = "МОИ ЗАЯВКИ НА РЕМОНТ";
             this.lblTitle.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // lblFilter
-            // 
-            this.lblFilter.Location = new System.Drawing.Point(20, 60);
-            this.lblFilter.Name = "lblFilter";
-            this.lblFilter.Size = new System.Drawing.Size(120, 30);
-            this.lblFilter.TabIndex = 1;
-            this.lblFilter.Text = "📊 Фильтр по статусу:";
-            this.lblFilter.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
             // cmbStatusFilter
             // 
             this.cmbStatusFilter.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
@@ -57,6 +48,15 @@
             this.cmbStatusFilter.Size = new System.Drawing.Size(160, 24);
             this.cmbStatusFilter.TabIndex = 2;
             this.cmbStatusFilter.SelectedIndexChanged += new System.EventHandler(this.cmbStatusFilter_SelectedIndexChanged);
+            // 
+            // lblFilter
+            // 
+            this.lblFilter.Location = new System.Drawing.Point(20, 60);
+            this.lblFilter.Name = "lblFilter";
+            this.lblFilter.Size = new System.Drawing.Size(120, 40);
+            this.lblFilter.TabIndex = 1;
+            this.lblFilter.Text = "📊 Фильтр по статусу:";
+            this.lblFilter.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // btnFilter
             // 
@@ -75,34 +75,6 @@
             this.btnResetFilter.TabIndex = 4;
             this.btnResetFilter.Text = "Сброс";
             this.btnResetFilter.Click += new System.EventHandler(this.btnResetFilter_Click);
-            // 
-            // lblStats
-            // 
-            this.lblStats.Location = new System.Drawing.Point(20, 100);
-            this.lblStats.Name = "lblStats";
-            this.lblStats.Size = new System.Drawing.Size(400, 25);
-            this.lblStats.TabIndex = 5;
-            this.lblStats.Text = "Загрузка статистики...";
-            // 
-            // lblCount
-            // 
-            this.lblCount.Location = new System.Drawing.Point(430, 100);
-            this.lblCount.Name = "lblCount";
-            this.lblCount.Size = new System.Drawing.Size(120, 25);
-            this.lblCount.TabIndex = 6;
-            this.lblCount.Text = "";
-            this.lblCount.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
-            // lblRejectedInfo
-            // 
-            this.lblRejectedInfo.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold);
-            this.lblRejectedInfo.ForeColor = System.Drawing.Color.Red;
-            this.lblRejectedInfo.Location = new System.Drawing.Point(20, 125);
-            this.lblRejectedInfo.Name = "lblRejectedInfo";
-            this.lblRejectedInfo.Size = new System.Drawing.Size(200, 25);
-            this.lblRejectedInfo.TabIndex = 7;
-            this.lblRejectedInfo.Text = "";
-            this.lblRejectedInfo.Visible = false;
             // 
             // dgvRequests
             // 
@@ -140,6 +112,32 @@
             this.btnRefresh.UseVisualStyleBackColor = false;
             this.btnRefresh.Click += new System.EventHandler(this.btnRefresh_Click);
             // 
+            // lblStats
+            // 
+            this.lblStats.Location = new System.Drawing.Point(20, 100);
+            this.lblStats.Name = "lblStats";
+            this.lblStats.Size = new System.Drawing.Size(400, 25);
+            this.lblStats.TabIndex = 5;
+            this.lblStats.Text = "Загрузка статистики...";
+            // 
+            // lblCount
+            // 
+            this.lblCount.Location = new System.Drawing.Point(430, 100);
+            this.lblCount.Name = "lblCount";
+            this.lblCount.Size = new System.Drawing.Size(120, 25);
+            this.lblCount.TabIndex = 6;
+            this.lblCount.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // lblRejectedInfo
+            // 
+            this.lblRejectedInfo.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold);
+            this.lblRejectedInfo.ForeColor = System.Drawing.Color.Red;
+            this.lblRejectedInfo.Location = new System.Drawing.Point(20, 125);
+            this.lblRejectedInfo.Name = "lblRejectedInfo";
+            this.lblRejectedInfo.Size = new System.Drawing.Size(200, 25);
+            this.lblRejectedInfo.TabIndex = 7;
+            this.lblRejectedInfo.Visible = false;
+            // 
             // MyRequestsForm
             // 
             this.ClientSize = new System.Drawing.Size(604, 503);
@@ -163,6 +161,7 @@
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MyRequestsForm_FormClosing);
             ((System.ComponentModel.ISupportInitialize)(this.dgvRequests)).EndInit();
             this.ResumeLayout(false);
+
         }
 
         private System.Windows.Forms.Label lblTitle;

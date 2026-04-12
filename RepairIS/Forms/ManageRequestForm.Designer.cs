@@ -76,14 +76,13 @@
             this.lblCreatedAt.Name = "lblCreatedAt";
             this.lblCreatedAt.Size = new System.Drawing.Size(220, 25);
             this.lblCreatedAt.TabIndex = 4;
-            this.lblCreatedAt.Text = "";
             this.lblCreatedAt.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // lblDesc
             // 
             this.lblDesc.Location = new System.Drawing.Point(20, 160);
             this.lblDesc.Name = "lblDesc";
-            this.lblDesc.Size = new System.Drawing.Size(150, 30);
+            this.lblDesc.Size = new System.Drawing.Size(150, 70);
             this.lblDesc.TabIndex = 5;
             this.lblDesc.Text = "📝 Описание проблемы:";
             // 
@@ -104,7 +103,6 @@
             this.lblInspectionInfo.Name = "lblInspectionInfo";
             this.lblInspectionInfo.Size = new System.Drawing.Size(530, 20);
             this.lblInspectionInfo.TabIndex = 7;
-            this.lblInspectionInfo.Text = "";
             this.lblInspectionInfo.Visible = false;
             // 
             // lblEstimateInfo
@@ -115,14 +113,13 @@
             this.lblEstimateInfo.Name = "lblEstimateInfo";
             this.lblEstimateInfo.Size = new System.Drawing.Size(530, 20);
             this.lblEstimateInfo.TabIndex = 8;
-            this.lblEstimateInfo.Text = "";
             this.lblEstimateInfo.Visible = false;
             // 
             // lblStatus
             // 
             this.lblStatus.Location = new System.Drawing.Point(20, 305);
             this.lblStatus.Name = "lblStatus";
-            this.lblStatus.Size = new System.Drawing.Size(120, 30);
+            this.lblStatus.Size = new System.Drawing.Size(120, 52);
             this.lblStatus.TabIndex = 9;
             this.lblStatus.Text = "📊 Изменить статус:";
             // 
@@ -140,7 +137,7 @@
             this.btnChangeStatus.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnChangeStatus.Location = new System.Drawing.Point(350, 305);
             this.btnChangeStatus.Name = "btnChangeStatus";
-            this.btnChangeStatus.Size = new System.Drawing.Size(130, 30);
+            this.btnChangeStatus.Size = new System.Drawing.Size(210, 30);
             this.btnChangeStatus.TabIndex = 11;
             this.btnChangeStatus.Text = "🔄 Сменить статус";
             this.btnChangeStatus.UseVisualStyleBackColor = false;
@@ -213,9 +210,9 @@
             this.Name = "ManageRequestForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Управление заявкой - Менеджер";
-            
             this.ResumeLayout(false);
             this.PerformLayout();
+
         }
 
         private System.Windows.Forms.Label lblTitle;

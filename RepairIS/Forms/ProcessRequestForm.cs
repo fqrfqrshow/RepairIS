@@ -267,5 +267,10 @@ namespace RepairIS.Forms
         }
 
         #endregion
+
+        private void lblClient_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

@@ -57,7 +57,6 @@
             this.lblActiveCount.Name = "lblActiveCount";
             this.lblActiveCount.Size = new System.Drawing.Size(150, 30);
             this.lblActiveCount.TabIndex = 2;
-            this.lblActiveCount.Text = "";
             this.lblActiveCount.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // lblStats
@@ -74,7 +73,6 @@
             this.lblCount.Name = "lblCount";
             this.lblCount.Size = new System.Drawing.Size(100, 25);
             this.lblCount.TabIndex = 4;
-            this.lblCount.Text = "";
             this.lblCount.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // dgvRequests
@@ -119,7 +117,7 @@
             this.btnRefresh.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnRefresh.Location = new System.Drawing.Point(380, 430);
             this.btnRefresh.Name = "btnRefresh";
-            this.btnRefresh.Size = new System.Drawing.Size(100, 45);
+            this.btnRefresh.Size = new System.Drawing.Size(90, 45);
             this.btnRefresh.TabIndex = 8;
             this.btnRefresh.Text = "🔄";
             this.btnRefresh.UseVisualStyleBackColor = false;
@@ -159,6 +157,7 @@
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MasterRequestsForm_FormClosing);
             ((System.ComponentModel.ISupportInitialize)(this.dgvRequests)).EndInit();
             this.ResumeLayout(false);
+
         }
 
         private System.Windows.Forms.Label lblTitle;

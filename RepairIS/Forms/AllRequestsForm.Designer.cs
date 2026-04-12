@@ -44,47 +44,29 @@
             this.lblTitle.Text = "УПРАВЛЕНИЕ ЗАЯВКАМИ (МЕНЕДЖЕР)";
             this.lblTitle.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // lblStatistics
-            // 
-            this.lblStatistics.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold);
-            this.lblStatistics.ForeColor = System.Drawing.Color.DarkBlue;
-            this.lblStatistics.Location = new System.Drawing.Point(30, 460);
-            this.lblStatistics.Name = "lblStatistics";
-            this.lblStatistics.Size = new System.Drawing.Size(400, 25);
-            this.lblStatistics.TabIndex = 11;
-            this.lblStatistics.Text = "📊 Статистика: загрузка...";
-            // 
-            // lblCount
-            // 
-            this.lblCount.Location = new System.Drawing.Point(680, 460);
-            this.lblCount.Name = "lblCount";
-            this.lblCount.Size = new System.Drawing.Size(200, 25);
-            this.lblCount.TabIndex = 12;
-            this.lblCount.Text = "Найдено: 0 заявок";
-            this.lblCount.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
             // lblStatusFilter
             // 
-            this.lblStatusFilter.Location = new System.Drawing.Point(30, 55);
+            this.lblStatusFilter.Location = new System.Drawing.Point(27, 45);
             this.lblStatusFilter.Name = "lblStatusFilter";
-            this.lblStatusFilter.Size = new System.Drawing.Size(120, 30);
+            this.lblStatusFilter.Size = new System.Drawing.Size(120, 45);
             this.lblStatusFilter.TabIndex = 1;
             this.lblStatusFilter.Text = "Фильтр по статусу:";
+            this.lblStatusFilter.Click += new System.EventHandler(this.lblStatusFilter_Click);
             // 
             // cmbStatusFilter
             // 
             this.cmbStatusFilter.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbStatusFilter.Location = new System.Drawing.Point(160, 55);
+            this.cmbStatusFilter.Location = new System.Drawing.Point(134, 55);
             this.cmbStatusFilter.Name = "cmbStatusFilter";
-            this.cmbStatusFilter.Size = new System.Drawing.Size(150, 24);
+            this.cmbStatusFilter.Size = new System.Drawing.Size(176, 24);
             this.cmbStatusFilter.TabIndex = 2;
             this.cmbStatusFilter.SelectedIndexChanged += new System.EventHandler(this.cmbStatusFilter_SelectedIndexChanged);
             // 
             // lblMasterFilter
             // 
-            this.lblMasterFilter.Location = new System.Drawing.Point(330, 55);
+            this.lblMasterFilter.Location = new System.Drawing.Point(334, 47);
             this.lblMasterFilter.Name = "lblMasterFilter";
-            this.lblMasterFilter.Size = new System.Drawing.Size(120, 30);
+            this.lblMasterFilter.Size = new System.Drawing.Size(120, 32);
             this.lblMasterFilter.TabIndex = 3;
             this.lblMasterFilter.Text = "Фильтр по мастеру:";
             // 
@@ -106,31 +88,6 @@
             this.btnFilter.Text = "Применить";
             this.btnFilter.Click += new System.EventHandler(this.btnFilter_Click);
             // 
-            // btnRefresh
-            // 
-            this.btnRefresh.Location = new System.Drawing.Point(740, 53);
-            this.btnRefresh.Name = "btnRefresh";
-            this.btnRefresh.Size = new System.Drawing.Size(100, 30);
-            this.btnRefresh.TabIndex = 6;
-            this.btnRefresh.Text = "Обновить";
-            this.btnRefresh.Click += new System.EventHandler(this.btnRefresh_Click);
-            // 
-            // lblSearch
-            // 
-            this.lblSearch.Location = new System.Drawing.Point(30, 90);
-            this.lblSearch.Name = "lblSearch";
-            this.lblSearch.Size = new System.Drawing.Size(60, 25);
-            this.lblSearch.TabIndex = 13;
-            this.lblSearch.Text = "Поиск:";
-            // 
-            // txtSearch
-            // 
-            this.txtSearch.Location = new System.Drawing.Point(100, 90);
-            this.txtSearch.Name = "txtSearch";
-            this.txtSearch.Size = new System.Drawing.Size(300, 22);
-            this.txtSearch.TabIndex = 14;
-            this.txtSearch.TextChanged += new System.EventHandler(this.txtSearch_TextChanged);
-            // 
             // dgvRequests
             // 
             this.dgvRequests.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
@@ -150,7 +107,7 @@
             this.btnProcess.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnProcess.Location = new System.Drawing.Point(30, 495);
             this.btnProcess.Name = "btnProcess";
-            this.btnProcess.Size = new System.Drawing.Size(155, 40);
+            this.btnProcess.Size = new System.Drawing.Size(155, 48);
             this.btnProcess.TabIndex = 8;
             this.btnProcess.Text = "📋 Обработать заявку";
             this.btnProcess.UseVisualStyleBackColor = false;
@@ -160,9 +117,9 @@
             // 
             this.btnAssignMaster.BackColor = System.Drawing.Color.LightYellow;
             this.btnAssignMaster.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnAssignMaster.Location = new System.Drawing.Point(195, 495);
+            this.btnAssignMaster.Location = new System.Drawing.Point(191, 493);
             this.btnAssignMaster.Name = "btnAssignMaster";
-            this.btnAssignMaster.Size = new System.Drawing.Size(155, 40);
+            this.btnAssignMaster.Size = new System.Drawing.Size(155, 53);
             this.btnAssignMaster.TabIndex = 9;
             this.btnAssignMaster.Text = "👤 Назначить мастера";
             this.btnAssignMaster.UseVisualStyleBackColor = false;
@@ -174,11 +131,55 @@
             this.btnCreateEstimate.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnCreateEstimate.Location = new System.Drawing.Point(360, 495);
             this.btnCreateEstimate.Name = "btnCreateEstimate";
-            this.btnCreateEstimate.Size = new System.Drawing.Size(155, 40);
+            this.btnCreateEstimate.Size = new System.Drawing.Size(155, 48);
             this.btnCreateEstimate.TabIndex = 10;
             this.btnCreateEstimate.Text = "💰 Создать смету";
             this.btnCreateEstimate.UseVisualStyleBackColor = false;
             this.btnCreateEstimate.Click += new System.EventHandler(this.btnCreateEstimate_Click);
+            // 
+            // btnRefresh
+            // 
+            this.btnRefresh.Location = new System.Drawing.Point(740, 53);
+            this.btnRefresh.Name = "btnRefresh";
+            this.btnRefresh.Size = new System.Drawing.Size(100, 30);
+            this.btnRefresh.TabIndex = 6;
+            this.btnRefresh.Text = "Обновить";
+            this.btnRefresh.Click += new System.EventHandler(this.btnRefresh_Click);
+            // 
+            // lblSearch
+            // 
+            this.lblSearch.Location = new System.Drawing.Point(30, 90);
+            this.lblSearch.Name = "lblSearch";
+            this.lblSearch.Size = new System.Drawing.Size(60, 22);
+            this.lblSearch.TabIndex = 13;
+            this.lblSearch.Text = "Поиск:";
+            // 
+            // txtSearch
+            // 
+            this.txtSearch.Location = new System.Drawing.Point(100, 90);
+            this.txtSearch.Name = "txtSearch";
+            this.txtSearch.Size = new System.Drawing.Size(300, 22);
+            this.txtSearch.TabIndex = 14;
+            this.txtSearch.TextChanged += new System.EventHandler(this.txtSearch_TextChanged);
+            // 
+            // lblStatistics
+            // 
+            this.lblStatistics.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold);
+            this.lblStatistics.ForeColor = System.Drawing.Color.DarkBlue;
+            this.lblStatistics.Location = new System.Drawing.Point(30, 460);
+            this.lblStatistics.Name = "lblStatistics";
+            this.lblStatistics.Size = new System.Drawing.Size(400, 25);
+            this.lblStatistics.TabIndex = 11;
+            this.lblStatistics.Text = "📊 Статистика: загрузка...";
+            // 
+            // lblCount
+            // 
+            this.lblCount.Location = new System.Drawing.Point(650, 460);
+            this.lblCount.Name = "lblCount";
+            this.lblCount.Size = new System.Drawing.Size(200, 25);
+            this.lblCount.TabIndex = 12;
+            this.lblCount.Text = "Найдено: 0 заявок";
+            this.lblCount.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // btnViewDetails
             // 
@@ -186,7 +187,7 @@
             this.btnViewDetails.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnViewDetails.Location = new System.Drawing.Point(525, 495);
             this.btnViewDetails.Name = "btnViewDetails";
-            this.btnViewDetails.Size = new System.Drawing.Size(155, 40);
+            this.btnViewDetails.Size = new System.Drawing.Size(155, 48);
             this.btnViewDetails.TabIndex = 15;
             this.btnViewDetails.Text = "🔍 Детали заявки";
             this.btnViewDetails.UseVisualStyleBackColor = false;
@@ -216,11 +217,11 @@
             this.Name = "AllRequestsForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Все заявки - Менеджер";
-           
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.AllRequestsForm_FormClosing);
             ((System.ComponentModel.ISupportInitialize)(this.dgvRequests)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
+
         }
 
         private System.Windows.Forms.Label lblTitle;

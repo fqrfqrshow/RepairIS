@@ -31,7 +31,7 @@
             this.lblTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold);
             this.lblTitle.Location = new System.Drawing.Point(50, 10);
             this.lblTitle.Name = "lblTitle";
-            this.lblTitle.Size = new System.Drawing.Size(400, 30);
+            this.lblTitle.Size = new System.Drawing.Size(400, 40);
             this.lblTitle.TabIndex = 0;
             this.lblTitle.Text = "НАЗНАЧЕНИЕ МАСТЕРА НА ЗАЯВКУ";
             this.lblTitle.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -46,22 +46,11 @@
             this.lblRequestInfo.TabIndex = 1;
             this.lblRequestInfo.Text = "Загрузка информации о заявке...";
             // 
-            // lblCurrentMaster
-            // 
-            this.lblCurrentMaster.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Italic);
-            this.lblCurrentMaster.ForeColor = System.Drawing.Color.Orange;
-            this.lblCurrentMaster.Location = new System.Drawing.Point(20, 95);
-            this.lblCurrentMaster.Name = "lblCurrentMaster";
-            this.lblCurrentMaster.Size = new System.Drawing.Size(460, 25);
-            this.lblCurrentMaster.TabIndex = 2;
-            this.lblCurrentMaster.Text = "";
-            this.lblCurrentMaster.Visible = false;
-            // 
             // lblMaster
             // 
             this.lblMaster.Location = new System.Drawing.Point(20, 130);
             this.lblMaster.Name = "lblMaster";
-            this.lblMaster.Size = new System.Drawing.Size(140, 30);
+            this.lblMaster.Size = new System.Drawing.Size(140, 29);
             this.lblMaster.TabIndex = 3;
             this.lblMaster.Text = "Выберите мастера:";
             this.lblMaster.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -73,15 +62,6 @@
             this.cmbMasters.Name = "cmbMasters";
             this.cmbMasters.Size = new System.Drawing.Size(250, 24);
             this.cmbMasters.TabIndex = 4;
-            // 
-            // lblMastersCount
-            // 
-            this.lblMastersCount.ForeColor = System.Drawing.Color.Gray;
-            this.lblMastersCount.Location = new System.Drawing.Point(420, 138);
-            this.lblMastersCount.Name = "lblMastersCount";
-            this.lblMastersCount.Size = new System.Drawing.Size(60, 20);
-            this.lblMastersCount.TabIndex = 5;
-            this.lblMastersCount.Text = "";
             // 
             // btnSave
             // 
@@ -106,6 +86,24 @@
             this.btnCancel.Text = "ОТМЕНА";
             this.btnCancel.UseVisualStyleBackColor = false;
             this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
+            // 
+            // lblCurrentMaster
+            // 
+            this.lblCurrentMaster.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Italic);
+            this.lblCurrentMaster.ForeColor = System.Drawing.Color.Orange;
+            this.lblCurrentMaster.Location = new System.Drawing.Point(20, 95);
+            this.lblCurrentMaster.Name = "lblCurrentMaster";
+            this.lblCurrentMaster.Size = new System.Drawing.Size(460, 25);
+            this.lblCurrentMaster.TabIndex = 2;
+            this.lblCurrentMaster.Visible = false;
+            // 
+            // lblMastersCount
+            // 
+            this.lblMastersCount.ForeColor = System.Drawing.Color.Gray;
+            this.lblMastersCount.Location = new System.Drawing.Point(420, 138);
+            this.lblMastersCount.Name = "lblMastersCount";
+            this.lblMastersCount.Size = new System.Drawing.Size(60, 20);
+            this.lblMastersCount.TabIndex = 5;
             // 
             // btnRefresh
             // 
@@ -138,6 +136,7 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Назначение мастера";
             this.ResumeLayout(false);
+
         }
 
         private System.Windows.Forms.Label lblTitle;

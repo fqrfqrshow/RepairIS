@@ -354,5 +354,10 @@ namespace RepairIS.Forms
         }
 
         #endregion
+
+        private void lblStatusFilter_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

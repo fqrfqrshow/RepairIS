@@ -40,7 +40,7 @@
             this.lblTitle.ForeColor = System.Drawing.Color.DarkBlue;
             this.lblTitle.Location = new System.Drawing.Point(50, 10);
             this.lblTitle.Name = "lblTitle";
-            this.lblTitle.Size = new System.Drawing.Size(480, 35);
+            this.lblTitle.Size = new System.Drawing.Size(480, 40);
             this.lblTitle.TabIndex = 0;
             this.lblTitle.Text = "АКТ ОСМОТРА СТАНКА";
             this.lblTitle.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -55,22 +55,11 @@
             this.lblRequestInfo.TabIndex = 1;
             this.lblRequestInfo.Text = "Загрузка информации о заявке...";
             // 
-            // lblExistingInfo
-            // 
-            this.lblExistingInfo.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Italic);
-            this.lblExistingInfo.ForeColor = System.Drawing.Color.Gray;
-            this.lblExistingInfo.Location = new System.Drawing.Point(20, 105);
-            this.lblExistingInfo.Name = "lblExistingInfo";
-            this.lblExistingInfo.Size = new System.Drawing.Size(520, 20);
-            this.lblExistingInfo.TabIndex = 2;
-            this.lblExistingInfo.Text = "";
-            this.lblExistingInfo.Visible = false;
-            // 
             // lblDesc
             // 
             this.lblDesc.Location = new System.Drawing.Point(20, 135);
             this.lblDesc.Name = "lblDesc";
-            this.lblDesc.Size = new System.Drawing.Size(160, 30);
+            this.lblDesc.Size = new System.Drawing.Size(160, 48);
             this.lblDesc.TabIndex = 3;
             this.lblDesc.Text = "📝 Описание неисправности:*";
             this.lblDesc.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -87,7 +76,7 @@
             // 
             this.lblWork.Location = new System.Drawing.Point(20, 210);
             this.lblWork.Name = "lblWork";
-            this.lblWork.Size = new System.Drawing.Size(160, 30);
+            this.lblWork.Size = new System.Drawing.Size(160, 60);
             this.lblWork.TabIndex = 5;
             this.lblWork.Text = "🛠 Необходимые работы:";
             this.lblWork.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -104,7 +93,7 @@
             // 
             this.lblParts.Location = new System.Drawing.Point(20, 285);
             this.lblParts.Name = "lblParts";
-            this.lblParts.Size = new System.Drawing.Size(160, 30);
+            this.lblParts.Size = new System.Drawing.Size(160, 60);
             this.lblParts.TabIndex = 7;
             this.lblParts.Text = "🔩 Необходимые детали:";
             this.lblParts.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -119,9 +108,9 @@
             // 
             // lblHours
             // 
-            this.lblHours.Location = new System.Drawing.Point(20, 360);
+            this.lblHours.Location = new System.Drawing.Point(20, 350);
             this.lblHours.Name = "lblHours";
-            this.lblHours.Size = new System.Drawing.Size(160, 30);
+            this.lblHours.Size = new System.Drawing.Size(160, 40);
             this.lblHours.TabIndex = 9;
             this.lblHours.Text = "⏱ Трудоёмкость (часы):*";
             this.lblHours.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -137,7 +126,7 @@
             // 
             this.lblCost.Location = new System.Drawing.Point(20, 400);
             this.lblCost.Name = "lblCost";
-            this.lblCost.Size = new System.Drawing.Size(160, 30);
+            this.lblCost.Size = new System.Drawing.Size(160, 39);
             this.lblCost.TabIndex = 11;
             this.lblCost.Text = "💰 Ориентир. стоимость:*";
             this.lblCost.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -148,17 +137,6 @@
             this.txtEstimatedCost.Name = "txtEstimatedCost";
             this.txtEstimatedCost.Size = new System.Drawing.Size(150, 22);
             this.txtEstimatedCost.TabIndex = 12;
-            // 
-            // lblEstimatedTotal
-            // 
-            this.lblEstimatedTotal.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold);
-            this.lblEstimatedTotal.ForeColor = System.Drawing.Color.Green;
-            this.lblEstimatedTotal.Location = new System.Drawing.Point(360, 360);
-            this.lblEstimatedTotal.Name = "lblEstimatedTotal";
-            this.lblEstimatedTotal.Size = new System.Drawing.Size(180, 65);
-            this.lblEstimatedTotal.TabIndex = 13;
-            this.lblEstimatedTotal.Text = "";
-            this.lblEstimatedTotal.Visible = false;
             // 
             // btnSave
             // 
@@ -198,6 +176,26 @@
             this.btnClear.UseVisualStyleBackColor = false;
             this.btnClear.Click += new System.EventHandler(this.btnClear_Click);
             // 
+            // lblExistingInfo
+            // 
+            this.lblExistingInfo.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Italic);
+            this.lblExistingInfo.ForeColor = System.Drawing.Color.Gray;
+            this.lblExistingInfo.Location = new System.Drawing.Point(20, 105);
+            this.lblExistingInfo.Name = "lblExistingInfo";
+            this.lblExistingInfo.Size = new System.Drawing.Size(520, 20);
+            this.lblExistingInfo.TabIndex = 2;
+            this.lblExistingInfo.Visible = false;
+            // 
+            // lblEstimatedTotal
+            // 
+            this.lblEstimatedTotal.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold);
+            this.lblEstimatedTotal.ForeColor = System.Drawing.Color.Green;
+            this.lblEstimatedTotal.Location = new System.Drawing.Point(360, 360);
+            this.lblEstimatedTotal.Name = "lblEstimatedTotal";
+            this.lblEstimatedTotal.Size = new System.Drawing.Size(180, 65);
+            this.lblEstimatedTotal.TabIndex = 13;
+            this.lblEstimatedTotal.Visible = false;
+            // 
             // InspectionForm
             // 
             this.ClientSize = new System.Drawing.Size(564, 533);
@@ -224,9 +222,9 @@
             this.Name = "InspectionForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Осмотр станка - Ремонтное предприятие";
-            
             this.ResumeLayout(false);
             this.PerformLayout();
+
         }
 
         private System.Windows.Forms.Label lblTitle;

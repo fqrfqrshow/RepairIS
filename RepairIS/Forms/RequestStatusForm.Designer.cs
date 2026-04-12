@@ -28,9 +28,9 @@
             // lblTitle
             // 
             this.lblTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold);
-            this.lblTitle.Location = new System.Drawing.Point(150, 10);
+            this.lblTitle.Location = new System.Drawing.Point(143, -2);
             this.lblTitle.Name = "lblTitle";
-            this.lblTitle.Size = new System.Drawing.Size(200, 30);
+            this.lblTitle.Size = new System.Drawing.Size(200, 47);
             this.lblTitle.TabIndex = 0;
             this.lblTitle.Text = "СТАТУС ЗАЯВКИ";
             this.lblTitle.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -39,7 +39,7 @@
             // 
             this.lblRequestId.Location = new System.Drawing.Point(30, 60);
             this.lblRequestId.Name = "lblRequestId";
-            this.lblRequestId.Size = new System.Drawing.Size(120, 30);
+            this.lblRequestId.Size = new System.Drawing.Size(120, 50);
             this.lblRequestId.TabIndex = 1;
             this.lblRequestId.Text = "Выберите заявку:";
             // 

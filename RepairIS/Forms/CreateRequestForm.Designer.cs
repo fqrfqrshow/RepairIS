@@ -37,7 +37,7 @@
             this.lblTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold);
             this.lblTitle.Location = new System.Drawing.Point(50, 10);
             this.lblTitle.Name = "lblTitle";
-            this.lblTitle.Size = new System.Drawing.Size(420, 30);
+            this.lblTitle.Size = new System.Drawing.Size(420, 43);
             this.lblTitle.TabIndex = 0;
             this.lblTitle.Text = "НОВАЯ ЗАЯВКА НА РЕМОНТ";
             this.lblTitle.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -46,7 +46,7 @@
             // 
             this.lblMachine.Location = new System.Drawing.Point(30, 55);
             this.lblMachine.Name = "lblMachine";
-            this.lblMachine.Size = new System.Drawing.Size(120, 30);
+            this.lblMachine.Size = new System.Drawing.Size(120, 27);
             this.lblMachine.TabIndex = 1;
             this.lblMachine.Text = "Модель станка:*";
             this.lblMachine.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -73,26 +73,6 @@
             this.btnAddMachine.UseVisualStyleBackColor = false;
             this.btnAddMachine.Click += new System.EventHandler(this.btnAddMachine_Click);
             // 
-            // lblMachinesCount
-            // 
-            this.lblMachinesCount.ForeColor = System.Drawing.Color.Gray;
-            this.lblMachinesCount.Location = new System.Drawing.Point(30, 88);
-            this.lblMachinesCount.Name = "lblMachinesCount";
-            this.lblMachinesCount.Size = new System.Drawing.Size(200, 20);
-            this.lblMachinesCount.TabIndex = 4;
-            this.lblMachinesCount.Text = "";
-            // 
-            // lblSelectedMachine
-            // 
-            this.lblSelectedMachine.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Italic);
-            this.lblSelectedMachine.ForeColor = System.Drawing.Color.Green;
-            this.lblSelectedMachine.Location = new System.Drawing.Point(160, 85);
-            this.lblSelectedMachine.Name = "lblSelectedMachine";
-            this.lblSelectedMachine.Size = new System.Drawing.Size(300, 20);
-            this.lblSelectedMachine.TabIndex = 5;
-            this.lblSelectedMachine.Text = "";
-            this.lblSelectedMachine.Visible = false;
-            // 
             // lblDesc
             // 
             this.lblDesc.Location = new System.Drawing.Point(30, 115);
@@ -112,9 +92,9 @@
             // 
             // lblMethod
             // 
-            this.lblMethod.Location = new System.Drawing.Point(30, 210);
+            this.lblMethod.Location = new System.Drawing.Point(30, 195);
             this.lblMethod.Name = "lblMethod";
-            this.lblMethod.Size = new System.Drawing.Size(120, 30);
+            this.lblMethod.Size = new System.Drawing.Size(120, 45);
             this.lblMethod.TabIndex = 8;
             this.lblMethod.Text = "Способ осмотра:*";
             this.lblMethod.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -124,7 +104,7 @@
             this.rbSelfDelivery.Checked = true;
             this.rbSelfDelivery.Location = new System.Drawing.Point(160, 212);
             this.rbSelfDelivery.Name = "rbSelfDelivery";
-            this.rbSelfDelivery.Size = new System.Drawing.Size(120, 24);
+            this.rbSelfDelivery.Size = new System.Drawing.Size(120, 40);
             this.rbSelfDelivery.TabIndex = 9;
             this.rbSelfDelivery.TabStop = true;
             this.rbSelfDelivery.Text = "🚚 Сам привезу";
@@ -134,16 +114,16 @@
             // 
             this.rbMasterVisit.Location = new System.Drawing.Point(290, 212);
             this.rbMasterVisit.Name = "rbMasterVisit";
-            this.rbMasterVisit.Size = new System.Drawing.Size(130, 24);
+            this.rbMasterVisit.Size = new System.Drawing.Size(130, 40);
             this.rbMasterVisit.TabIndex = 10;
             this.rbMasterVisit.Text = "🔧 Выезд мастера";
             this.rbMasterVisit.CheckedChanged += new System.EventHandler(this.rbInspectionMethod_CheckedChanged);
             // 
             // lblPhone
             // 
-            this.lblPhone.Location = new System.Drawing.Point(30, 255);
+            this.lblPhone.Location = new System.Drawing.Point(30, 258);
             this.lblPhone.Name = "lblPhone";
-            this.lblPhone.Size = new System.Drawing.Size(120, 30);
+            this.lblPhone.Size = new System.Drawing.Size(120, 36);
             this.lblPhone.TabIndex = 11;
             this.lblPhone.Text = "Контактный телефон:*";
             this.lblPhone.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -181,6 +161,24 @@
             this.btnCancel.UseVisualStyleBackColor = false;
             this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
             // 
+            // lblMachinesCount
+            // 
+            this.lblMachinesCount.ForeColor = System.Drawing.Color.Gray;
+            this.lblMachinesCount.Location = new System.Drawing.Point(30, 88);
+            this.lblMachinesCount.Name = "lblMachinesCount";
+            this.lblMachinesCount.Size = new System.Drawing.Size(200, 20);
+            this.lblMachinesCount.TabIndex = 4;
+            // 
+            // lblSelectedMachine
+            // 
+            this.lblSelectedMachine.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Italic);
+            this.lblSelectedMachine.ForeColor = System.Drawing.Color.Green;
+            this.lblSelectedMachine.Location = new System.Drawing.Point(160, 85);
+            this.lblSelectedMachine.Name = "lblSelectedMachine";
+            this.lblSelectedMachine.Size = new System.Drawing.Size(300, 20);
+            this.lblSelectedMachine.TabIndex = 5;
+            this.lblSelectedMachine.Visible = false;
+            // 
             // CreateRequestForm
             // 
             this.ClientSize = new System.Drawing.Size(504, 378);
@@ -207,6 +205,7 @@
             this.Text = "Создание заявки на ремонт";
             this.ResumeLayout(false);
             this.PerformLayout();
+
         }
 
         // Объявление компонентов

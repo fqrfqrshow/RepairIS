@@ -40,7 +40,7 @@
             // 
             this.lblRole.Location = new System.Drawing.Point(50, 70);
             this.lblRole.Name = "lblRole";
-            this.lblRole.Size = new System.Drawing.Size(80, 30);
+            this.lblRole.Size = new System.Drawing.Size(80, 24);
             this.lblRole.TabIndex = 1;
             this.lblRole.Text = "Роль:";
             // 
@@ -60,7 +60,7 @@
             // 
             this.lblLogin.Location = new System.Drawing.Point(50, 120);
             this.lblLogin.Name = "lblLogin";
-            this.lblLogin.Size = new System.Drawing.Size(80, 30);
+            this.lblLogin.Size = new System.Drawing.Size(80, 34);
             this.lblLogin.TabIndex = 3;
             this.lblLogin.Text = "Логин:";
             // 
@@ -75,7 +75,7 @@
             // 
             this.lblPassword.Location = new System.Drawing.Point(50, 170);
             this.lblPassword.Name = "lblPassword";
-            this.lblPassword.Size = new System.Drawing.Size(80, 30);
+            this.lblPassword.Size = new System.Drawing.Size(80, 38);
             this.lblPassword.TabIndex = 5;
             this.lblPassword.Text = "Пароль:";
             // 
@@ -105,7 +105,7 @@
             this.btnRegister.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnRegister.Location = new System.Drawing.Point(220, 230);
             this.btnRegister.Name = "btnRegister";
-            this.btnRegister.Size = new System.Drawing.Size(100, 40);
+            this.btnRegister.Size = new System.Drawing.Size(137, 40);
             this.btnRegister.TabIndex = 8;
             this.btnRegister.Text = "Регистрация";
             this.btnRegister.UseVisualStyleBackColor = false;

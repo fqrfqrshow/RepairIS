@@ -55,28 +55,6 @@
             this.lblRequestInfo.TabIndex = 1;
             this.lblRequestInfo.Text = "Загрузка информации о заявке...";
             // 
-            // lblEstimateDetails
-            // 
-            this.lblEstimateDetails.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Italic);
-            this.lblEstimateDetails.ForeColor = System.Drawing.Color.Gray;
-            this.lblEstimateDetails.Location = new System.Drawing.Point(20, 105);
-            this.lblEstimateDetails.Name = "lblEstimateDetails";
-            this.lblEstimateDetails.Size = new System.Drawing.Size(480, 40);
-            this.lblEstimateDetails.TabIndex = 2;
-            this.lblEstimateDetails.Text = "";
-            // 
-            // lblAlreadyConfirmed
-            // 
-            this.lblAlreadyConfirmed.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold);
-            this.lblAlreadyConfirmed.ForeColor = System.Drawing.Color.Green;
-            this.lblAlreadyConfirmed.Location = new System.Drawing.Point(20, 145);
-            this.lblAlreadyConfirmed.Name = "lblAlreadyConfirmed";
-            this.lblAlreadyConfirmed.Size = new System.Drawing.Size(480, 25);
-            this.lblAlreadyConfirmed.TabIndex = 3;
-            this.lblAlreadyConfirmed.Text = "";
-            this.lblAlreadyConfirmed.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.lblAlreadyConfirmed.Visible = false;
-            // 
             // lblWorkCost
             // 
             this.lblWorkCost.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
@@ -102,7 +80,7 @@
             this.lblPartsCost.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
             this.lblPartsCost.Location = new System.Drawing.Point(40, 225);
             this.lblPartsCost.Name = "lblPartsCost";
-            this.lblPartsCost.Size = new System.Drawing.Size(180, 30);
+            this.lblPartsCost.Size = new System.Drawing.Size(180, 40);
             this.lblPartsCost.TabIndex = 6;
             this.lblPartsCost.Text = "🔩 Стоимость деталей:";
             this.lblPartsCost.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -204,6 +182,26 @@
             this.btnReject.UseVisualStyleBackColor = false;
             this.btnReject.Click += new System.EventHandler(this.btnReject_Click);
             // 
+            // lblAlreadyConfirmed
+            // 
+            this.lblAlreadyConfirmed.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold);
+            this.lblAlreadyConfirmed.ForeColor = System.Drawing.Color.Green;
+            this.lblAlreadyConfirmed.Location = new System.Drawing.Point(20, 145);
+            this.lblAlreadyConfirmed.Name = "lblAlreadyConfirmed";
+            this.lblAlreadyConfirmed.Size = new System.Drawing.Size(480, 25);
+            this.lblAlreadyConfirmed.TabIndex = 3;
+            this.lblAlreadyConfirmed.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.lblAlreadyConfirmed.Visible = false;
+            // 
+            // lblEstimateDetails
+            // 
+            this.lblEstimateDetails.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Italic);
+            this.lblEstimateDetails.ForeColor = System.Drawing.Color.Gray;
+            this.lblEstimateDetails.Location = new System.Drawing.Point(20, 105);
+            this.lblEstimateDetails.Name = "lblEstimateDetails";
+            this.lblEstimateDetails.Size = new System.Drawing.Size(480, 40);
+            this.lblEstimateDetails.TabIndex = 2;
+            // 
             // btnPrint
             // 
             this.btnPrint.BackColor = System.Drawing.Color.LightGray;
@@ -242,8 +240,8 @@
             this.Name = "EstimateViewForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Просмотр сметы - Ремонтное предприятие";
-            
             this.ResumeLayout(false);
+
         }
 
         private System.Windows.Forms.Label lblTitle;

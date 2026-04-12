@@ -70,20 +70,7 @@ namespace RepairIS.Forms
             this.lblInspectionInfo.Name = "lblInspectionInfo";
             this.lblInspectionInfo.Size = new System.Drawing.Size(530, 60);
             this.lblInspectionInfo.TabIndex = 3;
-            this.lblInspectionInfo.Text = "";
             this.lblInspectionInfo.Visible = false;
-            // 
-            // lblNoInspectionWarning
-            // 
-            this.lblNoInspectionWarning.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold);
-            this.lblNoInspectionWarning.ForeColor = System.Drawing.Color.Red;
-            this.lblNoInspectionWarning.Location = new System.Drawing.Point(20, 200);
-            this.lblNoInspectionWarning.Name = "lblNoInspectionWarning";
-            this.lblNoInspectionWarning.Size = new System.Drawing.Size(530, 30);
-            this.lblNoInspectionWarning.TabIndex = 4;
-            this.lblNoInspectionWarning.Text = "";
-            this.lblNoInspectionWarning.Visible = false;
-            this.lblNoInspectionWarning.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // btnStartRepair
             // 
@@ -111,11 +98,23 @@ namespace RepairIS.Forms
             this.btnFinishRepair.UseVisualStyleBackColor = false;
             this.btnFinishRepair.Click += new System.EventHandler(this.btnFinishRepair_Click);
             // 
+            // btnCancel
+            // 
+            this.btnCancel.BackColor = System.Drawing.Color.LightCoral;
+            this.btnCancel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnCancel.Location = new System.Drawing.Point(470, 440);
+            this.btnCancel.Name = "btnCancel";
+            this.btnCancel.Size = new System.Drawing.Size(80, 35);
+            this.btnCancel.TabIndex = 11;
+            this.btnCancel.Text = "❌";
+            this.btnCancel.UseVisualStyleBackColor = false;
+            this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
+            // 
             // lblComment
             // 
             this.lblComment.Location = new System.Drawing.Point(50, 320);
             this.lblComment.Name = "lblComment";
-            this.lblComment.Size = new System.Drawing.Size(180, 30);
+            this.lblComment.Size = new System.Drawing.Size(180, 60);
             this.lblComment.TabIndex = 7;
             this.lblComment.Text = "📝 Комментарий по завершению:";
             this.lblComment.Visible = false;
@@ -146,17 +145,16 @@ namespace RepairIS.Forms
             this.dtpFinishDate.TabIndex = 10;
             this.dtpFinishDate.Visible = false;
             // 
-            // btnCancel
+            // lblNoInspectionWarning
             // 
-            this.btnCancel.BackColor = System.Drawing.Color.LightCoral;
-            this.btnCancel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnCancel.Location = new System.Drawing.Point(470, 440);
-            this.btnCancel.Name = "btnCancel";
-            this.btnCancel.Size = new System.Drawing.Size(80, 35);
-            this.btnCancel.TabIndex = 11;
-            this.btnCancel.Text = "❌";
-            this.btnCancel.UseVisualStyleBackColor = false;
-            this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
+            this.lblNoInspectionWarning.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold);
+            this.lblNoInspectionWarning.ForeColor = System.Drawing.Color.Red;
+            this.lblNoInspectionWarning.Location = new System.Drawing.Point(20, 200);
+            this.lblNoInspectionWarning.Name = "lblNoInspectionWarning";
+            this.lblNoInspectionWarning.Size = new System.Drawing.Size(530, 30);
+            this.lblNoInspectionWarning.TabIndex = 4;
+            this.lblNoInspectionWarning.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.lblNoInspectionWarning.Visible = false;
             // 
             // RepairStatusForm
             // 
@@ -181,6 +179,7 @@ namespace RepairIS.Forms
             this.Text = "Управление ремонтом - Мастер";
             this.ResumeLayout(false);
             this.PerformLayout();
+
         }
 
         private System.Windows.Forms.Label lblTitle;

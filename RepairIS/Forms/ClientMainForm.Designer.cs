@@ -30,9 +30,9 @@
             // 
             this.lblTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Bold);
             this.lblTitle.ForeColor = System.Drawing.Color.DarkBlue;
-            this.lblTitle.Location = new System.Drawing.Point(50, 15);
+            this.lblTitle.Location = new System.Drawing.Point(34, 9);
             this.lblTitle.Name = "lblTitle";
-            this.lblTitle.Size = new System.Drawing.Size(400, 35);
+            this.lblTitle.Size = new System.Drawing.Size(442, 35);
             this.lblTitle.TabIndex = 0;
             this.lblTitle.Text = "РЕМОНТНОЕ ПРЕДПРИЯТИЕ";
             this.lblTitle.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -43,7 +43,7 @@
             this.lblWelcome.ForeColor = System.Drawing.Color.Blue;
             this.lblWelcome.Location = new System.Drawing.Point(50, 55);
             this.lblWelcome.Name = "lblWelcome";
-            this.lblWelcome.Size = new System.Drawing.Size(300, 30);
+            this.lblWelcome.Size = new System.Drawing.Size(300, 40);
             this.lblWelcome.TabIndex = 1;
             this.lblWelcome.Text = "Добро пожаловать!";
             this.lblWelcome.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -153,6 +153,7 @@
             this.Text = "Ремонтное предприятие - Личный кабинет клиента";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.ClientMainForm_FormClosing);
             this.ResumeLayout(false);
+
         }
 
         private System.Windows.Forms.Label lblTitle;
