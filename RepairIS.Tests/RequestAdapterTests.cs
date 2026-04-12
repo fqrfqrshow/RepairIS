@@ -23,7 +23,15 @@ namespace RepairIS.Tests
 
             // Создаем заявку через OrderAdapter
             var orderAdapter = new OrderAdapter(TEST_REQUESTS_FILE, TEST_REQUESTS_FILE);
-            var request = new Request { Id = 1, ClientId = 1, MachineId = 1, Status = "Ожидает обработки", Description = "Тест" };
+            var request = new Request
+            {
+                Id = 1,
+                ClientId = 1,
+                MachineId = 1,
+                Status = "Ожидает обработки",
+                Description = "Тест",
+                ContactPhone = "79991234567"  // ← ДОБАВЛЕНО
+            };
             orderAdapter.CreateRequest(request);
 
             // Act
@@ -48,9 +56,28 @@ namespace RepairIS.Tests
             var orderAdapter = new OrderAdapter(TEST_REQUESTS_FILE, TEST_REQUESTS_FILE);
             var adapter = new RequestAdapter(TEST_REQUESTS_FILE, TEST_HISTORY_FILE);
 
-            orderAdapter.CreateRequest(new Request { ClientId = 1, MachineId = 1, Description = "Заявка 1" });
-            orderAdapter.CreateRequest(new Request { ClientId = 1, MachineId = 2, Description = "Заявка 2" });
-            orderAdapter.CreateRequest(new Request { ClientId = 2, MachineId = 3, Description = "Заявка 3" });
+            // ДОБАВЛЕН ContactPhone во все заявки
+            orderAdapter.CreateRequest(new Request
+            {
+                ClientId = 1,
+                MachineId = 1,
+                Description = "Заявка 1",
+                ContactPhone = "79991234567"
+            });
+            orderAdapter.CreateRequest(new Request
+            {
+                ClientId = 1,
+                MachineId = 2,
+                Description = "Заявка 2",
+                ContactPhone = "79991234567"
+            });
+            orderAdapter.CreateRequest(new Request
+            {
+                ClientId = 2,
+                MachineId = 3,
+                Description = "Заявка 3",
+                ContactPhone = "79991234567"
+            });
 
             // Act
             var clientRequests = adapter.GetRequestsByClientId(1);
