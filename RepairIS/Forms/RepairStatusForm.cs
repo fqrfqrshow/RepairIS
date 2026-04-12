@@ -5,75 +5,256 @@ using RepairIS.Models;
 
 namespace RepairIS.Forms
 {
+    /// <summary>
+    /// Форма для фиксации статуса ремонта мастером.
+    /// Соответствует прецеденту "Фиксация осмотра и статуса ремонта" из ТЗ.
+    /// </summary>
     public partial class RepairStatusForm : Form
     {
-        private int requestId;
-        private int masterId;
-        private RequestSystemFacade facade;
+        private readonly int _requestId;
+        private readonly int _masterId;
+        private readonly RequestSystemFacade _facade;
+        private Request _currentRequest;
+        private Inspection _inspection;
 
         public RepairStatusForm(int requestId, int masterId, RequestSystemFacade facade)
         {
-            this.requestId = requestId;
-            this.masterId = masterId;
-            this.facade = facade;
+            _requestId = requestId;
+            _masterId = masterId;
+            _facade = facade ?? throw new ArgumentNullException(nameof(facade));
             InitializeComponent();
-            openStatusForm();
+            LoadData();
+            SetupDateTimePicker();
+            UpdateUIState();
         }
 
-        // openStatusForm(): void - как на диаграмме
-        private void openStatusForm()
+        private void LoadData()
         {
-            UpdateStatusDisplay();
-        }
-
-        private void UpdateStatusDisplay()
-        {
-            var request = facade.GetRequest(requestId);
-            if (request != null)
+            try
             {
-                lblStatus.Text = $"Текущий статус: {request.Status}";
+                _currentRequest = _facade.GetRequest(_requestId);
+                _inspection = _facade.GetInspection(_requestId);
+
+                if (_currentRequest != null)
+                {
+                    LoadRequestInfo();
+                }
+                else
+                {
+                    MessageBox.Show($"Заявка №{_requestId} не найдена!", "Ошибка",
+                        MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    this.Close();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Ошибка загрузки данных: {ex.Message}", "Ошибка",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
-        // startRepair(): void - как на диаграмме
-        private void startRepair()
+        private void LoadRequestInfo()
         {
-            facade.ChangeStatus(requestId, "В процессе");
-            UpdateStatusDisplay();
-            MessageBox.Show("Ремонт начат!", "Успех", MessageBoxButtons.OK, MessageBoxIcon.Information);
-        }
+            var machine = _facade.GetMachine(_currentRequest.MachineId);
+            string machineName = machine?.Model ?? $"Станок #{_currentRequest.MachineId}";
 
-        // finishRepair(): void - как на диаграмме
-        private void finishRepair()
-        {
-            enterFinishData();
-        }
+            lblRequestInfo.Text = $"📋 Заявка №{_requestId} | 🔧 {machineName}";
+            lblStatus.Text = $"📊 Текущий статус: {_currentRequest.Status}";
 
-        // enterFinishData(): void - как на диаграмме
-        private void enterFinishData()
-        {
-            if (string.IsNullOrWhiteSpace(txtFinishComment.Text))
+            // Показываем данные осмотра
+            if (_inspection != null)
             {
-                MessageBox.Show("Введите комментарий о выполненной работе!", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                lblInspectionInfo.Visible = true;
+                lblInspectionInfo.Text = $"🔍 Данные осмотра от {_inspection.InspectionDate:dd.MM.yyyy}:\n" +
+                    $"   • Описание: {_inspection.Description}\n" +
+                    $"   • Трудоёмкость: {_inspection.LaborHours} ч\n" +
+                    $"   • Ориент. стоимость: {_inspection.EstimatedCost:N2} ₽";
+            }
+        }
+
+        private void SetupDateTimePicker()
+        {
+            dtpFinishDate.Value = DateTime.Now;
+            dtpFinishDate.MaxDate = DateTime.Now;
+            dtpFinishDate.MinDate = _currentRequest?.CreatedAt ?? DateTime.Now.AddDays(-30);
+        }
+
+        private void UpdateUIState()
+        {
+            if (_currentRequest == null) return;
+
+            bool canStartRepair = (_currentRequest.Status == "Станок принят" ||
+                                   _currentRequest.Status == "Назначен мастер");
+            bool canFinishRepair = (_currentRequest.Status == "В работе" ||
+                                    _currentRequest.Status == "В процессе");
+
+            btnStartRepair.Enabled = canStartRepair;
+            btnFinishRepair.Enabled = canFinishRepair;
+
+            // Если осмотр не проведен, блокируем кнопку начала ремонта
+            if (canStartRepair && _inspection == null)
+            {
+                btnStartRepair.Enabled = false;
+                lblNoInspectionWarning.Visible = true;
+                lblNoInspectionWarning.Text = "⚠️ Для начала ремонта необходимо провести осмотр!";
+            }
+            else
+            {
+                lblNoInspectionWarning.Visible = false;
+            }
+
+            // Настройка видимости полей для завершения
+            bool showFinishFields = canFinishRepair || _currentRequest.Status == "Завершено";
+            lblComment.Visible = showFinishFields;
+            txtFinishComment.Visible = showFinishFields;
+            lblDate.Visible = showFinishFields;
+            dtpFinishDate.Visible = showFinishFields;
+        }
+
+        private void StartRepair()
+        {
+            if (_currentRequest == null) return;
+
+            if (_inspection == null)
+            {
+                MessageBox.Show("Невозможно начать ремонт без проведённого осмотра!\n\n" +
+                    "Сначала проведите осмотр станка через форму 'Провести осмотр'.",
+                    "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
-            facade.ChangeStatus(requestId, "Завершено");
-            UpdateStatusDisplay();
+            var result = MessageBox.Show(
+                $"Начать ремонт по заявке №{_requestId}?\n\n" +
+                $"Станок: {(_facade.GetMachine(_currentRequest.MachineId)?.Model ?? "Неизвестен")}\n" +
+                $"Данные осмотра: {_inspection.Description}\n" +
+                $"Трудоёмкость: {_inspection.LaborHours} ч\n\n" +
+                $"Статус изменится на 'В работе'.",
+                "Подтверждение начала ремонта",
+                MessageBoxButtons.YesNo,
+                MessageBoxIcon.Question);
 
-            MessageBox.Show($"Ремонт завершён!\nДата: {dtpFinishDate.Value.ToShortDateString()}\nКомментарий: {txtFinishComment.Text}",
-                "Успех", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            this.Close();
+            if (result == DialogResult.Yes)
+            {
+                try
+                {
+                    bool success = _facade.ChangeStatus(_requestId, "В работе");
+
+                    if (success)
+                    {
+                        MessageBox.Show("✅ Ремонт начат!\n\n" +
+                            "Не забудьте отметить завершение ремонта после выполнения работ.",
+                            "Успех", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                        LoadData();
+                        UpdateUIState();
+                    }
+                    else
+                    {
+                        ShowError("Ошибка при начале ремонта!");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    ShowError($"Ошибка: {ex.Message}");
+                }
+            }
         }
+
+        private void FinishRepair()
+        {
+            if (_currentRequest == null) return;
+
+            // Валидация комментария
+            if (string.IsNullOrWhiteSpace(txtFinishComment.Text))
+            {
+                ShowWarning("Введите комментарий о выполненной работе!");
+                txtFinishComment.Focus();
+                return;
+            }
+
+            if (txtFinishComment.Text.Length < 10)
+            {
+                ShowWarning("Комментарий должен содержать не менее 10 символов!");
+                txtFinishComment.Focus();
+                return;
+            }
+
+            var result = MessageBox.Show(
+                $"Завершить ремонт по заявке №{_requestId}?\n\n" +
+                $"Дата завершения: {dtpFinishDate.Value:dd.MM.yyyy}\n" +
+                $"Комментарий: {txtFinishComment.Text}\n\n" +
+                $"Статус изменится на 'Завершено'.",
+                "Подтверждение завершения ремонта",
+                MessageBoxButtons.YesNo,
+                MessageBoxIcon.Question);
+
+            if (result == DialogResult.Yes)
+            {
+                try
+                {
+                    bool success = _facade.ChangeStatus(_requestId, "Завершено");
+
+                    if (success)
+                    {
+                        // Здесь можно сохранить комментарий о завершении в отдельный файл
+                        SaveRepairCompletionData();
+
+                        MessageBox.Show($"✅ Ремонт завершён!\n\n" +
+                            $"📅 Дата: {dtpFinishDate.Value:dd.MM.yyyy}\n" +
+                            $"📝 Комментарий: {txtFinishComment.Text}\n\n" +
+                            $"Заявка передана на оплату.",
+                            "Успех", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                        DialogResult = DialogResult.OK;
+                        Close();
+                    }
+                    else
+                    {
+                        ShowError("Ошибка при завершении ремонта!");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    ShowError($"Ошибка: {ex.Message}");
+                }
+            }
+        }
+
+        private void SaveRepairCompletionData()
+        {
+            // TODO: Сохранить данные о завершении ремонта в отдельный файл
+            // Можно добавить модель RepairCompletion с полями:
+            // RequestId, MasterId, CompletionDate, Comment
+        }
+
+        private void ShowWarning(string message)
+        {
+            MessageBox.Show(message, "Внимание", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+        }
+
+        private void ShowError(string message)
+        {
+            MessageBox.Show(message, "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        }
+
+        #region Обработчики событий
 
         private void btnStartRepair_Click(object sender, EventArgs e)
         {
-            startRepair();
+            StartRepair();
         }
 
         private void btnFinishRepair_Click(object sender, EventArgs e)
         {
-            finishRepair();
+            FinishRepair();
         }
+
+        private void btnCancel_Click(object sender, EventArgs e)
+        {
+            DialogResult = DialogResult.Cancel;
+            Close();
+        }
+
+        #endregion
     }
 }

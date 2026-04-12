@@ -1,149 +1,495 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Newtonsoft.Json;
 using RepairIS.Adapters;
 using RepairIS.Models;
 
 namespace RepairIS.Facades
 {
+    /// <summary>
+    /// Фасад для работы с информационной системой ремонтного предприятия.
+    /// Предоставляет унифицированный интерфейс для всех внешних взаимодействий.
+    /// </summary>
     public class RequestSystemFacade
     {
-        private OrderAdapter orderAdapter = new OrderAdapter();
-        private RequestAdapter requestAdapter = new RequestAdapter();
-        private InspectionAdapter inspectionAdapter = new InspectionAdapter();
-        private EstimateAdapter estimateAdapter = new EstimateAdapter();
-        private MasterAdapter masterAdapter = new MasterAdapter();
+        private readonly OrderAdapter _orderAdapter;
+        private readonly RequestAdapter _requestAdapter;
+        private readonly InspectionAdapter _inspectionAdapter;
+        private readonly EstimateAdapter _estimateAdapter;
+        private readonly MasterAdapter _masterAdapter;
 
-        // ========== OrderAdapter методы ==========
+        /// <summary>
+        /// События для уведомления UI об изменениях
+        /// </summary>
+        public event EventHandler<RequestStatusChangedEventArgs> RequestStatusChanged;
+        public event EventHandler<EstimateConfirmedEventArgs> EstimateConfirmed;
+        public event EventHandler<MasterAssignedEventArgs> MasterAssigned;
 
-        // Получает все единицы техники пользователя по его userId
-        // Десериализует JSON в список объектов Machine, при null возвращает пустой список
+        /// <summary>
+        /// Конструктор с возможностью внедрения зависимостей (для тестирования)
+        /// </summary>
+        public RequestSystemFacade(
+            OrderAdapter orderAdapter = null,
+            RequestAdapter requestAdapter = null,
+            InspectionAdapter inspectionAdapter = null,
+            EstimateAdapter estimateAdapter = null,
+            MasterAdapter masterAdapter = null)
+        {
+            _orderAdapter = orderAdapter ?? new OrderAdapter();
+            _requestAdapter = requestAdapter ?? new RequestAdapter();
+            _inspectionAdapter = inspectionAdapter ?? new InspectionAdapter();
+            _estimateAdapter = estimateAdapter ?? new EstimateAdapter();
+            _masterAdapter = masterAdapter ?? new MasterAdapter();
+
+            // Подписываемся на события адаптеров
+            SubscribeToAdapterEvents();
+        }
+
+        private void SubscribeToAdapterEvents()
+        {
+            _requestAdapter.StatusChanged += (s, e) =>
+                RequestStatusChanged?.Invoke(this, e);
+
+            _masterAdapter.MasterAssigned += (s, e) =>
+                MasterAssigned?.Invoke(this, e);
+        }
+
+        #region OrderAdapter Methods (Станки и заявки)
+
+        /// <summary>
+        /// Получает все единицы техники пользователя по его userId
+        /// </summary>
         public List<Machine> GetMachines(int userId)
         {
-            string json = orderAdapter.FetchMachines(userId);
-            return JsonConvert.DeserializeObject<List<Machine>>(json) ?? new List<Machine>();
+            if (userId <= 0)
+                throw new ArgumentException("UserId должен быть больше 0", nameof(userId));
+
+            return _orderAdapter.GetMachinesByOwnerId(userId);
         }
 
-        // Получает конкретную единицу техники по её Id
-        // Десериализует JSON в объект Machine
+        /// <summary>
+        /// Получает конкретную единицу техники по её Id
+        /// </summary>
         public Machine GetMachine(int machineId)
         {
-            string json = orderAdapter.FetchMachineById(machineId);
-            return JsonConvert.DeserializeObject<Machine>(json);
+            if (machineId <= 0)
+                throw new ArgumentException("MachineId должен быть больше 0", nameof(machineId));
+
+            return _orderAdapter.GetMachineById(machineId);
         }
 
-        // Создаёт новую заявку на ремонт, принимая JSON с данными заказа
+        /// <summary>
+        /// Создаёт новую заявку на ремонт
+        /// </summary>
+        /// <returns>ID созданной заявки</returns>
+        public int CreateOrder(Request request)
+        {
+            if (request == null)
+                throw new ArgumentNullException(nameof(request));
+
+            return _orderAdapter.CreateRequest(request);
+        }
+
+        /// <summary>
+        /// Создаёт новую заявку из JSON (для обратной совместимости)
+        /// </summary>
         public void CreateOrder(string orderJson)
         {
-            orderAdapter.PostOrder(orderJson);
+            if (string.IsNullOrWhiteSpace(orderJson))
+                throw new ArgumentException("JSON заявки не может быть пустым", nameof(orderJson));
+
+            _orderAdapter.PostOrder(orderJson);
         }
 
-        // Сохраняет новую единицу техники, принимая JSON с данными машины
+        /// <summary>
+        /// Сохраняет новую единицу техники
+        /// </summary>
+        /// <returns>ID сохраненного станка</returns>
+        public int SaveMachine(Machine machine)
+        {
+            if (machine == null)
+                throw new ArgumentNullException(nameof(machine));
+
+            return _orderAdapter.AddMachine(machine);
+        }
+
+        /// <summary>
+        /// Сохраняет новую единицу техники из JSON (для обратной совместимости)
+        /// </summary>
         public void SaveMachine(string machineJson)
         {
-            orderAdapter.PostMachine(machineJson);
+            if (string.IsNullOrWhiteSpace(machineJson))
+                throw new ArgumentException("JSON станка не может быть пустым", nameof(machineJson));
+
+            _orderAdapter.PostMachine(machineJson);
         }
 
-        // ========== RequestAdapter методы ==========
+        /// <summary>
+        /// Обновляет данные станка
+        /// </summary>
+        public bool UpdateMachine(Machine machine)
+        {
+            return _orderAdapter.UpdateMachine(machine);
+        }
 
-        // Получает заявку по её Id, десериализует JSON в объект Request
+        /// <summary>
+        /// Удаляет станок
+        /// </summary>
+        public bool DeleteMachine(int machineId)
+        {
+            return _orderAdapter.DeleteMachine(machineId);
+        }
+
+        #endregion
+
+        #region RequestAdapter Methods (Заявки)
+
+        /// <summary>
+        /// Получает заявку по её Id
+        /// </summary>
         public Request GetRequest(int id)
         {
-            string json = requestAdapter.FetchRequest(id);
-            return JsonConvert.DeserializeObject<Request>(json);
+            if (id <= 0)
+                throw new ArgumentException("ID заявки должен быть больше 0", nameof(id));
+
+            return _requestAdapter.GetRequestById(id);
         }
 
-        // Получает список всех заявок, десериализует JSON в список Request
-        // При null возвращает пустой список
+        /// <summary>
+        /// Получает список всех заявок
+        /// </summary>
         public List<Request> GetAllRequests()
         {
-            string json = requestAdapter.FetchAllRequests();
-            return JsonConvert.DeserializeObject<List<Request>>(json) ?? new List<Request>();
+            return _requestAdapter.GetAllRequests();
         }
 
-        // Изменяет статус заявки (например: "Новая" → "В работе")
-        public void ChangeStatus(int id, string status)
+        /// <summary>
+        /// Получает заявки клиента
+        /// </summary>
+        public List<Request> GetRequestsByClientId(int clientId)
         {
-            requestAdapter.UpdateStatus(id, status);
+            return _requestAdapter.GetRequestsByClientId(clientId);
         }
 
-        // Возвращает словарь с историей изменений статусов для всех заявок
-        // Ключ - Id заявки, значение - список строк с изменениями и датами
-        public Dictionary<int, List<string>> GetStatusHistory()
+        /// <summary>
+        /// Получает заявки мастера
+        /// </summary>
+        public List<Request> GetRequestsByMasterId(int masterId)
         {
-            return requestAdapter.GetStatusHistory();
+            return _requestAdapter.GetRequestsByMasterId(masterId);
         }
 
-        // ========== InspectionAdapter методы ==========
-
-        // Получает данные осмотра по Id заявки, десериализует в объект Inspection
-        public Inspection GetInspection(int id)
+        /// <summary>
+        /// Получает заявки по статусу
+        /// </summary>
+        public List<Request> GetRequestsByStatus(string status)
         {
-            string json = inspectionAdapter.FetchInspection(id);
-            return JsonConvert.DeserializeObject<Inspection>(json);
+            return _requestAdapter.GetRequestsByStatus(status);
         }
 
-        // Сохраняет данные осмотра (автоматически устанавливает текущую дату)
-        // Параметр id не используется - возможно, лишний или нужен для проверки
+        /// <summary>
+        /// Получает заявки, ожидающие обработки
+        /// </summary>
+        public List<Request> GetPendingRequests()
+        {
+            return _requestAdapter.GetPendingRequests();
+        }
+
+        /// <summary>
+        /// Изменяет статус заявки
+        /// </summary>
+        public bool ChangeStatus(int id, string status)
+        {
+            return _requestAdapter.UpdateStatus(id, status);
+        }
+
+        /// <summary>
+        /// Возвращает словарь с историей изменений статусов для всех заявок
+        /// </summary>
+        public Dictionary<int, List<StatusHistoryEntry>> GetStatusHistory()
+        {
+            return _requestAdapter.GetStatusHistory();
+        }
+
+        /// <summary>
+        /// Возвращает историю статусов для конкретной заявки
+        /// </summary>
+        public List<StatusHistoryEntry> GetStatusHistoryForRequest(int requestId)
+        {
+            return _requestAdapter.GetStatusHistoryForRequest(requestId);
+        }
+
+        /// <summary>
+        /// Удаляет заявку
+        /// </summary>
+        public bool DeleteRequest(int requestId)
+        {
+            return _requestAdapter.DeleteRequest(requestId);
+        }
+
+        #endregion
+
+        #region InspectionAdapter Methods (Осмотры)
+
+        /// <summary>
+        /// Получает данные осмотра по Id заявки
+        /// </summary>
+        public Inspection GetInspection(int requestId)
+        {
+            if (requestId <= 0)
+                throw new ArgumentException("RequestId должен быть больше 0", nameof(requestId));
+
+            return _inspectionAdapter.GetInspectionByRequestId(requestId);
+        }
+
+        /// <summary>
+        /// Сохраняет данные осмотра
+        /// </summary>
+        /// <returns>ID сохраненного осмотра</returns>
+        public int SaveInspection(Inspection inspection)
+        {
+            if (inspection == null)
+                throw new ArgumentNullException(nameof(inspection));
+
+            return _inspectionAdapter.SaveInspection(inspection);
+        }
+
+        /// <summary>
+        /// Сохраняет данные осмотра (старая сигнатура для совместимости)
+        /// </summary>
         public void SaveInspection(int id, Inspection inspection)
         {
-            string json = JsonConvert.SerializeObject(inspection);
-            inspectionAdapter.PostInspection(json);
+            SaveInspection(inspection);
         }
 
-        // ========== EstimateAdapter методы ==========
+        /// <summary>
+        /// Проверяет, был ли уже проведен осмотр для заявки
+        /// </summary>
+        public bool HasInspection(int requestId)
+        {
+            return _inspectionAdapter.InspectionExists(requestId);
+        }
 
-        // Получает смету по Id заявки, десериализует в объект Estimate
+        #endregion
+
+        #region EstimateAdapter Methods (Сметы)
+
+        /// <summary>
+        /// Получает смету по Id заявки
+        /// </summary>
         public Estimate GetEstimate(int requestId)
         {
-            string json = estimateAdapter.FetchEstimate(requestId);
-            return JsonConvert.DeserializeObject<Estimate>(json);
+            if (requestId <= 0)
+                throw new ArgumentException("RequestId должен быть больше 0", nameof(requestId));
+
+            return _estimateAdapter.GetEstimateByRequestId(requestId);
         }
 
-        // Сохраняет смету (если с таким RequestId уже есть - заменяет)
+        /// <summary>
+        /// Сохраняет смету
+        /// </summary>
+        /// <returns>ID сохраненной сметы</returns>
+        public int SaveEstimate(Estimate estimate)
+        {
+            if (estimate == null)
+                throw new ArgumentNullException(nameof(estimate));
+
+            return _estimateAdapter.SaveEstimate(estimate);
+        }
+
+        /// <summary>
+        /// Сохраняет смету (старая сигнатура для совместимости)
+        /// </summary>
         public void SaveEstimate(int id, Estimate estimate)
         {
-            string json = JsonConvert.SerializeObject(estimate);
-            estimateAdapter.PostEstimate(json);
+            SaveEstimate(estimate);
         }
 
-        // Подтверждает смету и автоматически обновляет статус заявки на "Смета подтверждена"
-        public void ConfirmEstimate(int requestId)
+        /// <summary>
+        /// Подтверждает смету и автоматически обновляет статус заявки
+        /// </summary>
+        public bool ConfirmEstimate(int requestId)
         {
-            estimateAdapter.ConfirmEstimate(requestId);
-            ChangeStatus(requestId, "Смета подтверждена");
+            if (requestId <= 0)
+                throw new ArgumentException("RequestId должен быть больше 0", nameof(requestId));
+
+            var result = _estimateAdapter.ConfirmEstimate(requestId);
+            if (result)
+            {
+                ChangeStatus(requestId, "Смета подтверждена");
+                EstimateConfirmed?.Invoke(this, new EstimateConfirmedEventArgs(requestId));
+            }
+            return result;
         }
 
-        // Отклоняет смету (удаляет её) и автоматически обновляет статус заявки на "Смета отклонена"
-        public void RejectEstimate(int requestId)
+        /// <summary>
+        /// Отклоняет смету и автоматически обновляет статус заявки
+        /// </summary>
+        public bool RejectEstimate(int requestId)
         {
-            estimateAdapter.RejectEstimate(requestId);
-            ChangeStatus(requestId, "Смета отклонена");
+            if (requestId <= 0)
+                throw new ArgumentException("RequestId должен быть больше 0", nameof(requestId));
+
+            var result = _estimateAdapter.RejectEstimate(requestId);
+            if (result)
+            {
+                ChangeStatus(requestId, "Смета отклонена");
+            }
+            return result;
         }
 
-        // ========== MasterAdapter методы ==========
+        /// <summary>
+        /// Проверяет, существует ли смета для заявки
+        /// </summary>
+        public bool HasEstimate(int requestId)
+        {
+            return _estimateAdapter.EstimateExists(requestId);
+        }
 
-        // Получает список всех мастеров, десериализует в список Master
-        // При null возвращает пустой список
+        #endregion
+
+        #region MasterAdapter Methods (Мастера)
+
+        /// <summary>
+        /// Получает список всех мастеров
+        /// </summary>
         public List<Master> GetMasters()
         {
-            string json = masterAdapter.FetchMasters();
-            return JsonConvert.DeserializeObject<List<Master>>(json) ?? new List<Master>();
+            return _masterAdapter.GetAllMasters();
         }
 
-        // Назначает мастера на заявку (создаёт анонимный объект с данными)
-        // Автоматически меняет статус заявки на "Назначен мастер"
-        public void AssignMaster(int requestId, int masterId)
+        /// <summary>
+        /// Получает мастера по ID
+        /// </summary>
+        public Master GetMasterById(int masterId)
         {
-            var assignData = new { requestId = requestId, masterId = masterId };
-            string json = JsonConvert.SerializeObject(assignData);
-            masterAdapter.PostAssignMaster(json);
+            return _masterAdapter.GetMasterById(masterId);
         }
 
-        // Сохраняет нового мастера в систему
-        public void SaveMaster(Master master)
+        /// <summary>
+        /// Назначает мастера на заявку
+        /// </summary>
+        public bool AssignMaster(int requestId, int masterId)
         {
-            string json = JsonConvert.SerializeObject(master);
-            masterAdapter.PostMaster(json);
+            if (requestId <= 0)
+                throw new ArgumentException("RequestId должен быть больше 0", nameof(requestId));
+            if (masterId <= 0)
+                throw new ArgumentException("MasterId должен быть больше 0", nameof(masterId));
+
+            return _masterAdapter.AssignMasterToRequest(requestId, masterId);
         }
+
+        /// <summary>
+        /// Сохраняет нового мастера
+        /// </summary>
+        /// <returns>ID сохраненного мастера</returns>
+        public int SaveMaster(Master master)
+        {
+            if (master == null)
+                throw new ArgumentNullException(nameof(master));
+
+            return _masterAdapter.AddMaster(master);
+        }
+
+        /// <summary>
+        /// Обновляет данные мастера
+        /// </summary>
+        public bool UpdateMaster(Master master)
+        {
+            return _masterAdapter.UpdateMaster(master);
+        }
+
+        /// <summary>
+        /// Удаляет мастера
+        /// </summary>
+        public bool DeleteMaster(int masterId)
+        {
+            return _masterAdapter.DeleteMaster(masterId);
+        }
+
+        #endregion
+
+        #region Комбинированные операции (Бизнес-логика)
+
+        /// <summary>
+        /// Полный цикл: осмотр → смета → подтверждение
+        /// </summary>
+        public bool ProcessInspectionAndEstimate(int requestId, Inspection inspection, Estimate estimate)
+        {
+            if (requestId <= 0)
+                throw new ArgumentException("RequestId должен быть больше 0", nameof(requestId));
+
+            // 1. Сохраняем осмотр
+            inspection.RequestId = requestId;
+            SaveInspection(inspection);
+
+            // 2. Сохраняем смету
+            estimate.RequestId = requestId;
+            SaveEstimate(estimate);
+
+            // 3. Меняем статус
+            ChangeStatus(requestId, "Смета сформирована");
+
+            return true;
+        }
+
+        /// <summary>
+        /// Завершение ремонта: завершаем ремонт и выставляем счет
+        /// </summary>
+        public bool CompleteRepair(int requestId)
+        {
+            var request = GetRequest(requestId);
+            if (request == null)
+                return false;
+
+            if (request.Status != "В работе")
+                throw new InvalidOperationException($"Нельзя завершить ремонт из статуса {request.Status}");
+
+            return ChangeStatus(requestId, "Завершено");
+        }
+
+        /// <summary>
+        /// Полная информация по заявке (для отображения)
+        /// </summary>
+        public RequestFullInfo GetFullRequestInfo(int requestId)
+        {
+            var request = GetRequest(requestId);
+            if (request == null)
+                return null;
+
+            return new RequestFullInfo
+            {
+                Request = request,
+                Machine = GetMachine(request.MachineId),
+                Master = request.MasterId > 0 ? GetMasterById(request.MasterId) : null,
+                Inspection = GetInspection(requestId),
+                Estimate = GetEstimate(requestId),
+                StatusHistory = GetStatusHistoryForRequest(requestId)
+            };
+        }
+
+        #endregion
+    }
+
+    /// <summary>
+    /// Полная информация по заявке
+    /// </summary>
+    public class RequestFullInfo
+    {
+        public Request Request { get; set; }
+        public Machine Machine { get; set; }
+        public Master Master { get; set; }
+        public Inspection Inspection { get; set; }
+        public Estimate Estimate { get; set; }
+        public List<StatusHistoryEntry> StatusHistory { get; set; }
+    }
+
+    /// <summary>
+    /// Аргументы события подтверждения сметы
+    /// </summary>
+    public class EstimateConfirmedEventArgs : EventArgs
+    {
+        public int RequestId { get; }
+        public EstimateConfirmedEventArgs(int requestId) => RequestId = requestId;
     }
 }

@@ -2,42 +2,80 @@
 using RepairIS.Facades;
 using RepairIS.Models;
 using System.IO;
+using System.Linq;
 
 namespace RepairIS.Tests
 {
     public class RequestSystemFacadeTests
     {
+        private const string TEST_PATH = "test_data/";
+
         [Fact]
-        public void FullWorkflow_ShouldWork()
+        public void CreateOrder_ShouldCreateNewRequest()
         {
-            // Очищаем файлы перед тестом
-            string[] files = { "orders.json", "masters.json", "machines.json", "inspections.json", "estimates.json" };
-            foreach (var f in files)
-                if (File.Exists(f)) File.Delete(f);
+            // Arrange
+            if (Directory.Exists(TEST_PATH)) Directory.Delete(TEST_PATH, true);
+            Directory.CreateDirectory(TEST_PATH);
 
             var facade = new RequestSystemFacade();
+            var request = new Request { MachineId = 1, ClientId = 1, Description = "Тест", ContactPhone = "123" };
 
-            // 1. Добавляем мастера
-            var master = new Master { Name = "Тестовый мастер" };
-            facade.SaveMaster(master);
+            // Act
+            int id = facade.CreateOrder(request);
 
-            // 2. Добавляем станок
-            var machine = new Machine { Model = "Станок", OwnerId = 1 };
-            facade.SaveMachine(Newtonsoft.Json.JsonConvert.SerializeObject(machine));
-
-            // 3. Создаём заявку
-            var request = new Request { MachineId = 1, ClientId = 1, Status = "Ожидает обработки" };
-            facade.CreateOrder(Newtonsoft.Json.JsonConvert.SerializeObject(request));
-
-            // 4. Проверяем
-            var savedRequest = facade.GetRequest(1);
-
-            Assert.NotNull(savedRequest);
-            Assert.Equal("Ожидает обработки", savedRequest.Status);
+            // Assert
+            Assert.True(id > 0);
+            var saved = facade.GetRequest(id);
+            Assert.NotNull(saved);
+            Assert.Equal("Тест", saved.Description);
 
             // Cleanup
-            foreach (var f in files)
-                if (File.Exists(f)) File.Delete(f);
+            Directory.Delete(TEST_PATH, true);
+        }
+
+        [Fact]
+        public void AddMaster_ShouldAddNewMaster()
+        {
+            // Arrange
+            if (Directory.Exists(TEST_PATH)) Directory.Delete(TEST_PATH, true);
+            Directory.CreateDirectory(TEST_PATH);
+
+            var facade = new RequestSystemFacade();
+            var master = new Master { Name = "Новый мастер", Phone = "123" };
+
+            // Act
+            int id = facade.SaveMaster(master);
+
+            // Assert
+            Assert.True(id > 0);
+            var masters = facade.GetMasters();
+            Assert.Contains(masters, m => m.Name == "Новый мастер");
+
+            // Cleanup
+            Directory.Delete(TEST_PATH, true);
+        }
+
+        [Fact]
+        public void ChangeStatus_ShouldUpdateRequestStatus()
+        {
+            // Arrange
+            if (Directory.Exists(TEST_PATH)) Directory.Delete(TEST_PATH, true);
+            Directory.CreateDirectory(TEST_PATH);
+
+            var facade = new RequestSystemFacade();
+            var request = new Request { MachineId = 1, ClientId = 1, Description = "Тест", ContactPhone = "123" };
+            int id = facade.CreateOrder(request);
+
+            // Act
+            bool result = facade.ChangeStatus(id, "Принята в работу");
+            var updated = facade.GetRequest(id);
+
+            // Assert
+            Assert.True(result);
+            Assert.Equal("Принята в работу", updated.Status);
+
+            // Cleanup
+            Directory.Delete(TEST_PATH, true);
         }
     }
 }

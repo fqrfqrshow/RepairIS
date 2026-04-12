@@ -1,93 +1,255 @@
 ﻿using System;
 using System.Windows.Forms;
-using Newtonsoft.Json;
-using RepairIS.Models;
 using RepairIS.Facades;
+using RepairIS.Models;
 
 namespace RepairIS.Forms
 {
+    /// <summary>
+    /// Форма для проведения осмотра станка и фиксации результатов.
+    /// Соответствует прецеденту "Фиксация осмотра и статуса ремонта" из ТЗ.
+    /// </summary>
     public partial class InspectionForm : Form
     {
-        private int requestId;
-        private RequestSystemFacade facade;
+        private readonly int _requestId;
+        private readonly RequestSystemFacade _facade;
+        private Request _request;
+        private Inspection _existingInspection;
 
         public InspectionForm(int requestId, RequestSystemFacade facade)
         {
-            this.requestId = requestId;
-            this.facade = facade;
+            _requestId = requestId;
+            _facade = facade ?? throw new ArgumentNullException(nameof(facade));
             InitializeComponent();
-            open();
+            LoadData();
+            SetupValidation();
         }
 
-        // open(): void - как на диаграмме
-        private void open()
+        private void LoadData()
         {
-            showRequestInfo();
-        }
-
-        // showRequestInfo(): void - как на диаграмме
-        private void showRequestInfo()
-        {
-            var request = facade.GetRequest(requestId);
-            if (request != null)
+            try
             {
-                lblRequestInfo.Text = $"Заявка №{requestId} | Станок ID: {request.MachineId} | Клиент: {request.ClientId}\nСтатус: {request.Status}";
+                LoadRequestInfo();
+                LoadExistingInspection();
+                UpdateEstimatedTotal();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Ошибка загрузки данных: {ex.Message}", "Ошибка",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void LoadRequestInfo()
+        {
+            _request = _facade.GetRequest(_requestId);
+
+            if (_request != null)
+            {
+                var machine = _facade.GetMachine(_request.MachineId);
+                string machineName = machine?.Model ?? $"Станок #{_request.MachineId}";
+
+                lblRequestInfo.Text = $"📋 Заявка №{_requestId}\n" +
+                    $"🔧 Станок: {machineName}\n" +
+                    $"👤 Клиент ID: {_request.ClientId}\n" +
+                    $"📊 Статус: {_request.Status}";
             }
             else
             {
-                lblRequestInfo.Text = $"Заявка №{requestId} не найдена";
+                lblRequestInfo.Text = $"⚠️ Заявка №{_requestId} не найдена";
+                btnSave.Enabled = false;
             }
         }
 
-        // enterInspectionData(): void - как на диаграмме (данные вводятся в поля)
-        private void enterInspectionData()
+        private void LoadExistingInspection()
         {
-            // Пользователь вводит данные в текстовые поля
+            _existingInspection = _facade.GetInspection(_requestId);
+
+            if (_existingInspection != null)
+            {
+                // Заполняем поля существующими данными
+                txtDescription.Text = _existingInspection.Description;
+                txtWorkRequired.Text = _existingInspection.WorkRequired;
+                txtPartsNeeded.Text = _existingInspection.PartsNeeded;
+                txtLaborHours.Text = _existingInspection.LaborHours.ToString();
+                txtEstimatedCost.Text = _existingInspection.EstimatedCost.ToString();
+
+                lblExistingInfo.Text = $"📄 Существующий осмотр от {_existingInspection.InspectionDate:dd.MM.yyyy HH:mm}";
+                lblExistingInfo.Visible = true;
+
+                btnSave.Text = "🔄 ОБНОВИТЬ ОСМОТР";
+            }
         }
 
-        // saveInspection(): void - как на диаграмме
-        private void saveInspection()
+        private void SetupValidation()
         {
+            // Валидация трудоёмкости (только цифры и точка)
+            txtLaborHours.KeyPress += ValidateNumberInput;
+            txtEstimatedCost.KeyPress += ValidateNumberInput;
+
+            // Автоматический расчет общей стоимости
+            txtEstimatedCost.TextChanged += (s, e) => UpdateEstimatedTotal();
+            txtLaborHours.TextChanged += (s, e) => UpdateEstimatedTotal();
+        }
+
+        private void ValidateNumberInput(object sender, KeyPressEventArgs e)
+        {
+            // Разрешаем цифры, точку, запятую и Backspace
+            if (!char.IsDigit(e.KeyChar) && e.KeyChar != ',' && e.KeyChar != '.' && e.KeyChar != '\b')
+            {
+                e.Handled = true;
+            }
+        }
+
+        private void UpdateEstimatedTotal()
+        {
+            float laborHours = ParseFloat(txtLaborHours.Text);
+            float estimatedCost = ParseFloat(txtEstimatedCost.Text);
+
+            if (laborHours > 0 || estimatedCost > 0)
+            {
+                lblEstimatedTotal.Text = $"💰 Ориентировочная стоимость: {estimatedCost:N2} ₽\n" +
+                                         $"⏱ Трудоёмкость: {laborHours:F1} ч.\n" +
+                                         $"💵 Ставка в час: {(laborHours > 0 ? estimatedCost / laborHours : 0):N2} ₽/ч";
+                lblEstimatedTotal.Visible = true;
+            }
+            else
+            {
+                lblEstimatedTotal.Visible = false;
+            }
+        }
+
+        private float ParseFloat(string text)
+        {
+            if (string.IsNullOrWhiteSpace(text))
+                return 0;
+
+            text = text.Replace(',', '.');
+            float result;
+            float.TryParse(text, out result);
+            return result;
+        }
+
+        private void SaveInspection()
+        {
+            // Валидация
             if (string.IsNullOrWhiteSpace(txtDescription.Text))
             {
-                MessageBox.Show("Введите описание неисправности!", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                ShowWarning("Введите описание неисправности!");
+                txtDescription.Focus();
                 return;
             }
 
-            float laborHours;
-            if (!float.TryParse(txtLaborHours.Text, out laborHours))
+            float laborHours = ParseFloat(txtLaborHours.Text);
+            if (laborHours <= 0)
             {
-                MessageBox.Show("Введите корректную трудоёмкость!", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                ShowWarning("Введите корректную трудоёмкость (часы)!");
+                txtLaborHours.Focus();
                 return;
             }
 
-            float estimatedCost;
-            if (!float.TryParse(txtEstimatedCost.Text, out estimatedCost))
+            float estimatedCost = ParseFloat(txtEstimatedCost.Text);
+            if (estimatedCost <= 0)
             {
-                MessageBox.Show("Введите ориентировочную стоимость!", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                ShowWarning("Введите ориентировочную стоимость!");
+                txtEstimatedCost.Focus();
                 return;
             }
 
-            var inspection = new Inspection
+            try
             {
-                RequestId = requestId,
-                Description = txtDescription.Text,
-                WorkRequired = txtWorkRequired.Text,
-                PartsNeeded = txtPartsNeeded.Text,
-                LaborHours = laborHours,
-                EstimatedCost = estimatedCost,
-                InspectionDate = DateTime.Now
-            };
+                var inspection = new Inspection
+                {
+                    RequestId = _requestId,
+                    Description = txtDescription.Text.Trim(),
+                    WorkRequired = txtWorkRequired.Text.Trim(),
+                    PartsNeeded = txtPartsNeeded.Text.Trim(),
+                    LaborHours = laborHours,
+                    EstimatedCost = estimatedCost,
+                    InspectionDate = DateTime.Now
+                };
 
-            facade.SaveInspection(requestId, inspection);
+                int inspectionId = _facade.SaveInspection(inspection);
 
-            MessageBox.Show("Данные осмотра сохранены!", "Успех", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            this.Close();
+                if (inspectionId > 0)
+                {
+                    string message = _existingInspection == null
+                        ? "✅ Данные осмотра успешно сохранены!\n\n" +
+                          $"📝 Описание: {inspection.Description}\n" +
+                          $"⏱ Трудоёмкость: {laborHours} ч\n" +
+                          $"💰 Ориентир. стоимость: {estimatedCost:N2} ₽"
+                        : "✅ Данные осмотра успешно обновлены!";
+
+                    MessageBox.Show(message, "Успех", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                    // Обновляем статус заявки
+                    if (_request != null && _request.Status == "Назначен мастер")
+                    {
+                        _facade.ChangeStatus(_requestId, "Станок принят");
+                    }
+
+                    DialogResult = DialogResult.OK;
+                    Close();
+                }
+                else
+                {
+                    ShowError("Ошибка при сохранении данных осмотра!");
+                }
+            }
+            catch (Exception ex)
+            {
+                ShowError($"Ошибка: {ex.Message}");
+            }
         }
+
+        #region Вспомогательные методы
+
+        private void ShowWarning(string message)
+        {
+            MessageBox.Show(message, "Внимание", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+        }
+
+        private void ShowError(string message)
+        {
+            MessageBox.Show(message, "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        }
+
+        private void ShowInfo(string message)
+        {
+            MessageBox.Show(message, "Информация", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+        #endregion
+
+        #region Обработчики событий
 
         private void btnSave_Click(object sender, EventArgs e)
         {
-            saveInspection();
+            SaveInspection();
         }
+
+        private void btnCancel_Click(object sender, EventArgs e)
+        {
+            DialogResult = DialogResult.Cancel;
+            Close();
+        }
+
+        private void btnClear_Click(object sender, EventArgs e)
+        {
+            var result = MessageBox.Show("Очистить все поля формы?", "Подтверждение",
+                MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+            if (result == DialogResult.Yes)
+            {
+                txtDescription.Clear();
+                txtWorkRequired.Clear();
+                txtPartsNeeded.Clear();
+                txtLaborHours.Clear();
+                txtEstimatedCost.Clear();
+                txtDescription.Focus();
+            }
+        }
+
+        #endregion
     }
 }

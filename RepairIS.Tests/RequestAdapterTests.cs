@@ -1,35 +1,66 @@
 ﻿using Xunit;
-using Newtonsoft.Json;
 using RepairIS.Adapters;
 using RepairIS.Models;
+using System;
 using System.IO;
-using System.Reflection;
+using System.Linq;
 
 namespace RepairIS.Tests
 {
     public class RequestAdapterTests
     {
+        private const string TEST_REQUESTS_FILE = "test_orders.json";
+        private const string TEST_HISTORY_FILE = "test_history.json";
+
         [Fact]
         public void UpdateStatus_ShouldChangeStatus()
         {
             // Arrange
-            string testFile = "orders.json";
-            if (File.Exists(testFile)) File.Delete(testFile);
+            if (File.Exists(TEST_REQUESTS_FILE)) File.Delete(TEST_REQUESTS_FILE);
+            if (File.Exists(TEST_HISTORY_FILE)) File.Delete(TEST_HISTORY_FILE);
 
-            var request = new Request { Id = 1, Status = "Ожидает обработки" };
-            File.WriteAllText(testFile, JsonConvert.SerializeObject(new[] { request }));
+            var adapter = new RequestAdapter(TEST_REQUESTS_FILE, TEST_HISTORY_FILE);
 
-            var adapter = new RequestAdapter();
+            // Создаем заявку через OrderAdapter
+            var orderAdapter = new OrderAdapter(TEST_REQUESTS_FILE, TEST_REQUESTS_FILE);
+            var request = new Request { Id = 1, ClientId = 1, MachineId = 1, Status = "Ожидает обработки", Description = "Тест" };
+            orderAdapter.CreateRequest(request);
 
             // Act
-            adapter.UpdateStatus(1, "Принята в работу");
+            bool result = adapter.UpdateStatus(1, "Принята в работу");
+            var updated = adapter.GetRequestById(1);
 
             // Assert
-            var saved = JsonConvert.DeserializeObject<Request[]>(File.ReadAllText(testFile));
-            Assert.Equal("Принята в работу", saved[0].Status);
+            Assert.True(result);
+            Assert.Equal("Принята в работу", updated.Status);
 
             // Cleanup
-            File.Delete(testFile);
+            File.Delete(TEST_REQUESTS_FILE);
+            File.Delete(TEST_HISTORY_FILE);
+        }
+
+        [Fact]
+        public void GetRequestsByClientId_ShouldReturnCorrectRequests()
+        {
+            // Arrange
+            if (File.Exists(TEST_REQUESTS_FILE)) File.Delete(TEST_REQUESTS_FILE);
+
+            var orderAdapter = new OrderAdapter(TEST_REQUESTS_FILE, TEST_REQUESTS_FILE);
+            var adapter = new RequestAdapter(TEST_REQUESTS_FILE, TEST_HISTORY_FILE);
+
+            orderAdapter.CreateRequest(new Request { ClientId = 1, MachineId = 1, Description = "Заявка 1" });
+            orderAdapter.CreateRequest(new Request { ClientId = 1, MachineId = 2, Description = "Заявка 2" });
+            orderAdapter.CreateRequest(new Request { ClientId = 2, MachineId = 3, Description = "Заявка 3" });
+
+            // Act
+            var clientRequests = adapter.GetRequestsByClientId(1);
+
+            // Assert
+            Assert.Equal(2, clientRequests.Count);
+            Assert.All(clientRequests, r => Assert.Equal(1, r.ClientId));
+
+            // Cleanup
+            File.Delete(TEST_REQUESTS_FILE);
         }
     }
 }
