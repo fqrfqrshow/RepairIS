@@ -92,3 +92,10 @@
 ```bash
 git clone https://github.com/fqrfqrshow/RepairIS.git
 cd RepairIS
+Откройте RepairIS.sln в Visual Studio 2022 и соберите решение.
+
+👩‍💻 Автор
+Д. В. Фролова
+Группа КИ24-20Б, СФУ
+Красноярск, 2026
+Кафедра прикладной информатики, ИКИТ, СФУ
