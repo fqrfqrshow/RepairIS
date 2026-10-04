@@ -42,6 +42,26 @@
 
 ---
 
+## 🏗️ Архитектура
+
+RepairIS — **desktop-приложение** на C# (Windows Forms) с хранением данных в **JSON-файлах**.
+
+Архитектура построена на паттернах **Adapter** и **Facade** и разделена на 4 слоя:
+
+1. **UI (Windows Forms)** — формы приложения
+2. **Business Logic (RequestSystemFacade)** — координация операций, каскадные изменения
+3. **Data Access (Adapters)** — работа с JSON-файлами (OrderAdapter, RequestAdapter, InspectionAdapter, EstimateAdapter, MasterAdapter)
+4. **Storage (JSON)** — файлы данных (orders.json, users.json, machines.json, estimates.json, inspections.json, masters.json)
+
+**Преимущества выбранной архитектуры:**
+- Слабая связанность слоёв
+- Лёгкость тестирования
+- Возможность перехода на СУБД без переписывания бизнес-логики
+
+Подробнее: [docs/architecture/components.md](docs/architecture/components.md)
+
+---
+
 ## 🛠️ Технологический стек
 
 | Категория | Инструмент |
@@ -54,9 +74,50 @@
 | IDE | Visual Studio 2022 |
 | Система контроля версий | Git + GitHub |
 | Трекер задач | GitHub Issues + Projects |
-| Инструмент моделирования | draw.io (UML, ER-диаграммы) |
+| Инструмент моделирования | draw.io, PlantUML |
 | Клиент для тестирования API | Postman |
 | Средство контейнеризации | Docker |
+
+---
+
+## 📁 Документация
+
+### 📊 Анализ предметной области (BPMN)
+
+| Файл | Описание |
+|------|----------|
+| [docs/bpmn/as_is.md](docs/bpmn/as_is.md) | Описание текущего (As-Is) процесса |
+| [docs/bpmn/to_be.md](docs/bpmn/to_be.md) | Описание целевого (To-Be) процесса |
+| [docs/bpmn/to_be.png](docs/bpmn/to_be.png) | BPMN-диаграмма целевого процесса |
+
+### 📋 Требования
+
+| Файл | Описание |
+|------|----------|
+| [docs/requirements/functional.md](docs/requirements/functional.md) | Функциональные требования |
+| [docs/requirements/non_functional.md](docs/requirements/non_functional.md) | Нефункциональные требования (NFR) |
+
+### 🏛️ Архитектура (C4 Model)
+
+| Файл | Описание |
+|------|----------|
+| [docs/architecture/context_diagram.png](docs/architecture/context_diagram.png) | C4 Level 1 — Контекстная диаграмма |
+| [docs/architecture/containers_diagram.png](docs/architecture/containers_diagram.png) | C4 Level 2 — Диаграмма контейнеров |
+| [docs/architecture/components.md](docs/architecture/components.md) | Описание компонентов системы |
+
+### 🗄️ Модель данных
+
+| Файл | Описание |
+|------|----------|
+| [docs/data/er_diagram.png](docs/data/er_diagram.png) | ER-диаграмма |
+| [docs/data/er_diagram.md](docs/data/er_diagram.md) | Описание модели данных + нормализация 3НФ |
+
+### 📝 Архитектурные решения (ADR)
+
+| Файл | Описание |
+|------|----------|
+| [docs/adr/001_architecture_style.md](docs/adr/001_architecture_style.md) | ADR-001: выбор архитектурного стиля (монолит) |
+| [docs/adr/002_database_choice.md](docs/adr/002_database_choice.md) | ADR-002: выбор хранилища данных (JSON вместо СУБД) |
 
 ---
 
@@ -87,25 +148,58 @@
 
 > **Примечание:** Если папки `bin/Debug` нет, нужно сначала собрать проект (см. раздел "Для разработчиков").
 
-
-
 ### Для разработчиков
-Для разработчиков
-Клонируйте репозиторий:
-git clone https://github.com/fqrfqrshow/RepairIS.git
-cd RepairIS
 
+1. Клонируйте репозиторий:
+   ```bash
+   git clone https://github.com/fqrfqrshow/RepairIS.git
+   cd RepairIS
+   ```
+2. Откройте файл `RepairIS.sln` в Visual Studio 2022.
+3. Соберите решение: **Build → Build Solution** (или `Ctrl+Shift+B`).
+4. Запустите проект: **F5** или зелёная кнопка **Start**.
 
-Откройте файл RepairIS.sln в Visual Studio 2022.
+### Учётные данные
 
-Соберите решение: Build → Build Solution (или Ctrl+Shift+B).
+При первом запуске автоматически создаётся файл `users.json` с учётной записью менеджера:
+- **Логин:** `manager`
+- **Пароль:** `manager`
+- **Роль:** Менеджер
 
-Запустите проект: F5 или зелёная кнопка Start.
+Для ролей «Мастер» и «Заказчик» необходимо зарегистрироваться через форму регистрации или добавить пользователей вручную в `users.json`.
+
+---
+
+## 🧪 Тестирование
+
+Проект покрыт модульными тестами (xUnit.net):
+- **Всего тестов:** 12
+- **Покрытие кода:** 89%
+- **Все тесты пройдены:** ✅
+
+Запуск тестов: в Visual Studio → **Test Explorer → Run All Tests**.
+
+---
+
+## 📊 Статус проекта
+
+- ✅ Анализ предметной области (As-Is / To-Be)
+- ✅ BPMN-диаграмма целевого процесса
+- ✅ Функциональные и нефункциональные требования
+- ✅ Архитектура (C4 Level 1 и Level 2)
+- ✅ Модель данных (ER-диаграмма, 3НФ)
+- ✅ Архитектурные решения (ADR)
+- ✅ Реализация на C# (Windows Forms)
+- ✅ Модульное тестирование (89% покрытия)
+
+---
+
 ## 👩‍💻 Автор
 
 **Диана Владимировна Фролова**
 Группа КИ24-20Б, СФУ
 Красноярск, 2026
 
+---
 
 <!-- Связано с задачей #1 -->
