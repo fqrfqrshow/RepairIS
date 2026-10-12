@@ -1,4 +1,6 @@
-# RepairIS — Автоматизация учёта заявок (build 0.1.0)
+
+# RepairIS — Система учёта заявок ремонтного предприятия (версия 0.1.0)
+
 
 [![C#](https://img.shields.io/badge/C%23-12.0-blue)](https://dotnet.microsoft.com/)
 [![.NET](https://img.shields.io/badge/.NET-4.8-purple)](https://dotnet.microsoft.com/en-us/download/dotnet-framework/net48)
