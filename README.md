@@ -172,14 +172,29 @@ RepairIS — **desktop-приложение** на C# (Windows Forms) с хра�
 
 ---
 
-## 🧪 Тестирование
+## 🧪 Тестирование и качество кода
 
-Проект покрыт модульными тестами (xUnit.net):
-- **Всего тестов:** 12
-- **Покрытие кода:** 89%
-- **Все тесты пройдены:** ✅
+В проекте настроены инструменты контроля качества:
 
-Запуск тестов: в Visual Studio → **Test Explorer → Run All Tests**.
+1. **Форматтер:** `.editorconfig` + `dotnet format`.
+2. **Линтер:** SonarLint для Visual Studio.
+3. **Pre-commit:** `.pre-commit-config.yaml` — проверка перед каждым коммитом.
+4. **Тесты:** xUnit.net — 12 тестов, покрытие 89%.
+5. **Покрытие:** coverlet.msbuild.
+
+Запуск тестов:
+
+dotnet test
+
+**Подробнее в папке docs/module4/:**
+
+environment_setup.md — настройка среды.
+
+quality_report.md — отчёт линтеров.
+
+test_coverage_report.md — отчёт о покрытии.
+
+ai_usage_and_risks.md — использование ИИ и риски.
 
 ---
 
