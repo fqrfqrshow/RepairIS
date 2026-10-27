@@ -177,7 +177,7 @@ RepairIS — **desktop-приложение** на C# (Windows Forms) с хра�
 В проекте настроены инструменты контроля качества:
 
 1. **Форматтер:** `.editorconfig` + `dotnet format`.
-2. **Линтер:** SonarLint для Visual Studio.
+2. **Статический анализ:** встроенный анализатор Visual Studio (Roslyn).
 3. **Pre-commit:** `.pre-commit-config.yaml` — проверка перед каждым коммитом.
 4. **Тесты:** xUnit.net — 12 тестов, покрытие 89%.
 5. **Покрытие:** coverlet.msbuild.
