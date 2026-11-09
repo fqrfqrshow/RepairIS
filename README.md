@@ -84,6 +84,17 @@ RepairIS — **desktop-приложение** на C# (Windows Forms) с хра�
 
 ## 📁 Документация
 
+## 📊 Документация (Практика 5)
+
+- [docs/module5/data-dictionary.md](docs/module5/data-dictionary.md) — словарь данных.
+- [docs/module5/migrations.md](docs/module5/migrations.md) — описание миграций.
+- [docs/module5/transactions_demo.md](docs/module5/transactions_demo.md) — транзакции.
+- [docs/module5/backup_instructions.md](docs/module5/backup_instructions.md) — резервное копирование.
+- [docs/module5/backup_check.md](docs/module5/backup_check.md) — проверка восстановления.
+- [docs/module5/transactions_demo/](docs/module5/transactions_demo/) — демонстрации.
+- [docs/adr/002_migration_tool.md](docs/adr/002_migration_tool.md) — ADR-002: выбор миграций.
+- [migrations/](migrations/) — файлы миграций.
+  
 ### 📊 Анализ предметной области (BPMN)
 
 | Файл | Описание |
