@@ -1,0 +1,24 @@
+meta {
+  name: Create request
+  type: http
+  seq: 2
+}
+post {
+  url: {{baseUrl}}/requests
+  body: json
+  auth: bearer
+}
+auth:bearer {
+  token: {{token}}
+}
+body:json {
+  { "description": "Не включается шпиндель станка", "inspectionMethod": "visit", "machineId": 1, "priority": 2 }
+}
+script:post-response {
+  bru.setEnvVar("requestId", res.body.id);
+}
+tests {
+  test("status 201", () => expect(res.status).to.equal(201));
+  test("has id", () => expect(res.body).to.have.property("id"));
+  test("status pending", () => expect(res.body.status).to.equal("pending"));
+}
