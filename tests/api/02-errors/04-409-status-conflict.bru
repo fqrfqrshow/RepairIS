@@ -1,0 +1,19 @@
+meta {
+  name: Invalid status transition
+  type: http
+  seq: 4
+}
+patch {
+  url: {{baseUrl}}/requests/{{requestId}}
+  body: json
+  auth: bearer
+}
+auth:bearer {
+  token: {{token}}
+}
+body:json {
+  { "status": "completed" }
+}
+tests {
+  test("status 409", () => expect(res.status).to.equal(409));
+}
