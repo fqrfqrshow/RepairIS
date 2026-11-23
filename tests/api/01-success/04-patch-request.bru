@@ -1,0 +1,20 @@
+meta {
+  name: Patch request status
+  type: http
+  seq: 4
+}
+patch {
+  url: {{baseUrl}}/requests/{{requestId}}
+  body: json
+  auth: bearer
+}
+auth:bearer {
+  token: {{token}}
+}
+body:json {
+  { "status": "in_progress" }
+}
+tests {
+  test("status 200", () => expect(res.status).to.equal(200));
+  test("status changed", () => expect(res.body.status).to.equal("in_progress"));
+}
