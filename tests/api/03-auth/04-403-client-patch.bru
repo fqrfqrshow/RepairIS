@@ -1,0 +1,19 @@
+meta {
+  name: Client tries to patch request
+  type: http
+  seq: 4
+}
+patch {
+  url: {{baseUrl}}/requests/{{requestId}}
+  body: json
+  auth: bearer
+}
+auth:bearer {
+  token: {{clientToken}}
+}
+body:json {
+  { "status": "in_progress" }
+}
+tests {
+  test("status 403", () => expect(res.status).to.equal(403));
+}

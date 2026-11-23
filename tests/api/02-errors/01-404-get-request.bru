@@ -1,0 +1,17 @@
+meta {
+  name: Get not existing request
+  type: http
+  seq: 1
+}
+get {
+  url: {{baseUrl}}/requests/999999
+  auth: bearer
+}
+auth:bearer {
+  token: {{token}}
+}
+tests {
+  test("status 404", () => expect(res.status).to.equal(404));
+  test("rfc9457 type", () => expect(res.body).to.have.property("type"));
+  test("rfc9457 title", () => expect(res.body).to.have.property("title"));
+}

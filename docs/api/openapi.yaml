@@ -1,0 +1,470 @@
+openapi: 3.0.3
+info:
+  title: RepairIS API
+  version: 1.0.0
+  description: API информационной системы ремонтного предприятия (заявки, станки, осмотры, сметы).
+servers:
+  - url: http://localhost:5000/api/v1
+    description: Локальный сервер
+  - url: http://localhost:4010/api/v1
+    description: Mock-сервер Prism
+
+paths:
+  /auth/login:
+    post:
+      summary: Вход в систему
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                login: { type: string }
+                password: { type: string }
+              required: [login, password]
+      responses:
+        '200':
+          description: JWT выдан
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token: { type: string }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '422': { $ref: '#/components/responses/ValidationError' }
+        '500': { $ref: '#/components/responses/InternalError' }
+
+  /requests:
+    get:
+      summary: Список заявок (фильтрация, пагинация)
+      parameters:
+        - name: status
+          in: query
+          schema: { type: string, enum: [pending, in_progress, assigned, completed, paid, closed] }
+        - name: masterId
+          in: query
+          schema: { type: integer }
+        - name: dateFrom
+          in: query
+          schema: { type: string, format: date }
+        - name: dateTo
+          in: query
+          schema: { type: string, format: date }
+        - name: page
+          in: query
+          schema: { type: integer, default: 1, minimum: 1 }
+        - name: limit
+          in: query
+          schema: { type: integer, default: 20, maximum: 100 }
+      responses:
+        '200':
+          description: Список заявок
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items: { $ref: '#/components/schemas/Request' }
+                  total: { type: integer }
+                  page: { type: integer }
+                  limit: { type: integer }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '500': { $ref: '#/components/responses/InternalError' }
+    post:
+      summary: Создать заявку на ремонт
+      security: [{ bearerAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/RequestCreate' }
+      responses:
+        '201':
+          description: Заявка создана
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Request' }
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '422': { $ref: '#/components/responses/ValidationError' }
+        '500': { $ref: '#/components/responses/InternalError' }
+
+  /requests/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema: { type: integer }
+    get:
+      summary: Заявка по ID
+      security: [{ bearerAuth: [] }]
+      responses:
+        '200':
+          description: Заявка
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Request' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '404': { $ref: '#/components/responses/NotFound' }
+    patch:
+      summary: Частичное изменение заявки (статус, мастер)
+      security: [{ bearerAuth: [] }]
+      requestBody:
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/RequestUpdate' }
+      responses:
+        '200':
+          description: Обновлено
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Request' }
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '404': { $ref: '#/components/responses/NotFound' }
+        '409': { $ref: '#/components/responses/Conflict' }
+        '422': { $ref: '#/components/responses/ValidationError' }
+    delete:
+      summary: Удалить заявку
+      security: [{ bearerAuth: [] }]
+      responses:
+        '204': { description: Удалено }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '404': { $ref: '#/components/responses/NotFound' }
+
+  /requests/{id}/estimate:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema: { type: integer }
+    get:
+      summary: Смета по заявке
+      security: [{ bearerAuth: [] }]
+      responses:
+        '200':
+          description: Смета
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Estimate' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '404': { $ref: '#/components/responses/NotFound' }
+
+  /requests/{id}/inspections:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema: { type: integer }
+    get:
+      summary: Осмотры по заявке
+      security: [{ bearerAuth: [] }]
+      responses:
+        '200':
+          description: Список осмотров
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/Inspection' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '404': { $ref: '#/components/responses/NotFound' }
+
+  /machines:
+    get:
+      summary: Список станков
+      security: [{ bearerAuth: [] }]
+      responses:
+        '200':
+          description: Список станков
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/Machine' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+    post:
+      summary: Добавить станок
+      security: [{ bearerAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/MachineCreate' }
+      responses:
+        '201':
+          description: Создан
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Machine' }
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '422': { $ref: '#/components/responses/ValidationError' }
+
+  /machines/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema: { type: integer }
+    get:
+      summary: Станок по ID
+      security: [{ bearerAuth: [] }]
+      responses:
+        '200':
+          description: Станок
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Machine' }
+        '404': { $ref: '#/components/responses/NotFound' }
+    patch:
+      summary: Изменить станок
+      security: [{ bearerAuth: [] }]
+      requestBody:
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/MachineCreate' }
+      responses:
+        '200':
+          description: Обновлено
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Machine' }
+        '422': { $ref: '#/components/responses/ValidationError' }
+    delete:
+      summary: Удалить станок
+      security: [{ bearerAuth: [] }]
+      responses:
+        '204': { description: Удалено }
+        '404': { $ref: '#/components/responses/NotFound' }
+
+  /users:
+    get:
+      summary: Список пользователей (только менеджер)
+      security: [{ bearerAuth: [] }]
+      responses:
+        '200':
+          description: Список
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/User' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+
+  /inspections:
+    post:
+      summary: Зафиксировать осмотр (мастер)
+      security: [{ bearerAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/InspectionCreate' }
+      responses:
+        '201':
+          description: Создан
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Inspection' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '422': { $ref: '#/components/responses/ValidationError' }
+
+  /estimates:
+    post:
+      summary: Создать смету (менеджер)
+      security: [{ bearerAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/EstimateCreate' }
+      responses:
+        '201':
+          description: Создана
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Estimate' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '422': { $ref: '#/components/responses/ValidationError' }
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    Request:
+      type: object
+      properties:
+        id: { type: integer }
+        createdAt: { type: string, format: date-time }
+        status:
+          type: string
+          enum: [pending, in_progress, assigned, completed, paid, closed]
+        inspectionMethod:
+          type: string
+          enum: [visit, self]
+        description: { type: string }
+        clientId: { type: integer }
+        masterId: { type: integer, nullable: true }
+        machineId: { type: integer }
+      required: [id, createdAt, status, description, clientId, machineId]
+
+    RequestCreate:
+      type: object
+      properties:
+        description: { type: string, minLength: 10 }
+        inspectionMethod: { type: string, enum: [visit, self] }
+        machineId: { type: integer }
+        priority: { type: integer, minimum: 0, maximum: 3 }
+      required: [description, inspectionMethod, machineId, priority]
+
+    RequestUpdate:
+      type: object
+      properties:
+        status:
+          type: string
+          enum: [pending, in_progress, assigned, completed, paid, closed]
+        masterId: { type: integer }
+
+    Machine:
+      type: object
+      properties:
+        id: { type: integer }
+        model: { type: string }
+        serialNumber: { type: string }
+        manufacturer: { type: string, nullable: true }
+        warrantyUntil: { type: string, format: date, nullable: true }
+        ownerId: { type: integer }
+      required: [id, model, serialNumber, ownerId]
+
+    MachineCreate:
+      type: object
+      properties:
+        model: { type: string, minLength: 1 }
+        serialNumber: { type: string, minLength: 1 }
+        manufacturer: { type: string }
+        warrantyUntil: { type: string, format: date }
+        ownerId: { type: integer }
+      required: [model, serialNumber, ownerId]
+
+    Inspection:
+      type: object
+      properties:
+        id: { type: integer }
+        requestId: { type: integer }
+        description: { type: string }
+        partsNeeded: { type: string, nullable: true }
+        laborHours: { type: number, minimum: 0 }
+        estimatedCost: { type: number, minimum: 0 }
+        inspectionDate: { type: string, format: date-time }
+      required: [id, requestId, description, laborHours, estimatedCost, inspectionDate]
+
+    InspectionCreate:
+      type: object
+      properties:
+        requestId: { type: integer }
+        description: { type: string, minLength: 1 }
+        partsNeeded: { type: string }
+        laborHours: { type: number, minimum: 0 }
+        estimatedCost: { type: number, minimum: 0 }
+      required: [requestId, description, laborHours, estimatedCost]
+
+    Estimate:
+      type: object
+      properties:
+        id: { type: integer }
+        requestId: { type: integer }
+        workCost: { type: number, minimum: 0 }
+        partsCost: { type: number, minimum: 0 }
+        logisticsCost: { type: number, minimum: 0 }
+        extraCost: { type: number, minimum: 0 }
+        totalCost: { type: number, minimum: 0 }
+        isConfirmed: { type: boolean }
+        createdAt: { type: string, format: date-time }
+      required: [id, requestId, totalCost, isConfirmed, createdAt]
+
+    EstimateCreate:
+      type: object
+      properties:
+        requestId: { type: integer }
+        workCost: { type: number, minimum: 0 }
+        partsCost: { type: number, minimum: 0 }
+        logisticsCost: { type: number, minimum: 0 }
+        extraCost: { type: number, minimum: 0 }
+        totalCost: { type: number, minimum: 0 }
+      required: [requestId, workCost, partsCost, totalCost]
+
+    User:
+      type: object
+      properties:
+        id: { type: integer }
+        login: { type: string }
+        name: { type: string }
+        role:
+          type: string
+          enum: [Client, Manager, Master]
+        email: { type: string, format: email, nullable: true }
+        phone: { type: string, nullable: true }
+      required: [id, login, name, role]
+
+    Error:
+      type: object
+      properties:
+        type: { type: string }
+        title: { type: string }
+        status: { type: integer }
+        detail: { type: string }
+        instance: { type: string }
+      required: [type, title, status]
+
+  responses:
+    BadRequest:
+      description: Некорректный запрос
+      content:
+        application/problem+json:
+          schema: { $ref: '#/components/schemas/Error' }
+    Unauthorized:
+      description: Не пройдена аутентификация
+      content:
+        application/problem+json:
+          schema: { $ref: '#/components/schemas/Error' }
+    Forbidden:
+      description: Недостаточно прав
+      content:
+        application/problem+json:
+          schema: { $ref: '#/components/schemas/Error' }
+    NotFound:
+      description: Ресурс не найден
+      content:
+        application/problem+json:
+          schema: { $ref: '#/components/schemas/Error' }
+    Conflict:
+      description: Конфликт состояния
+      content:
+        application/problem+json:
+          schema: { $ref: '#/components/schemas/Error' }
+    ValidationError:
+      description: Ошибка валидации
+      content:
+        application/problem+json:
+          schema: { $ref: '#/components/schemas/Error' }
+    InternalError:
+      description: Внутренняя ошибка сервера
+      content:
+        application/problem+json:
+          schema: { $ref: '#/components/schemas/Error' }

@@ -1,0 +1,22 @@
+meta {
+  name: Create request with empty description
+  type: http
+  seq: 2
+}
+post {
+  url: {{baseUrl}}/requests
+  body: json
+  auth: bearer
+}
+auth:bearer {
+  token: {{token}}
+}
+body:json {
+  { "description": "", "inspectionMethod": "visit", "machineId": 1, "priority": 1 }
+}
+tests {
+  test("status 422", () => expect(res.status).to.equal(422));
+  test("has title", () => expect(res.body).to.have.property("title"));
+  test("has status", () => expect(res.body.status).to.equal(422));
+  test("has detail", () => expect(res.body).to.have.property("detail"));
+}

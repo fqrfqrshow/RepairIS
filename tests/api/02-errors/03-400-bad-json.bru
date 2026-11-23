@@ -1,0 +1,19 @@
+meta {
+  name: Create request with broken json
+  type: http
+  seq: 3
+}
+post {
+  url: {{baseUrl}}/requests
+  body: text
+  auth: bearer
+}
+auth:bearer {
+  token: {{token}}
+}
+body:text {
+  { "description": "broken
+}
+tests {
+  test("status 400", () => expect(res.status).to.equal(400));
+}

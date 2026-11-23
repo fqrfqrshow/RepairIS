@@ -1,0 +1,12 @@
+meta {
+  name: Request without token
+  type: http
+  seq: 1
+}
+get {
+  url: {{baseUrl}}/requests
+  auth: none
+}
+tests {
+  test("status 401", () => expect(res.status).to.equal(401));
+}

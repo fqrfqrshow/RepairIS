@@ -1,0 +1,19 @@
+meta {
+  name: Login client
+  type: http
+  seq: 3
+}
+post {
+  url: {{baseUrl}}/auth/login
+  body: json
+  auth: none
+}
+body:json {
+  { "login": "client1", "password": "client123" }
+}
+script:post-response {
+  bru.setEnvVar("clientToken", res.body.token);
+}
+tests {
+  test("status 200", () => expect(res.status).to.equal(200));
+}

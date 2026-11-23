@@ -221,7 +221,35 @@ ai_usage_and_risks.md — использование ИИ и риски.
 - ✅ Модульное тестирование (89% покрытия)
 
 ---
+## API
 
+- Спецификация: `docs/api/openapi.yaml`
+- Документация (онлайн): https://redocly.github.io/redoc/?url=<RAW_URL_К_OPENAPI_YAML>
+- Mock-сервер: `http://localhost:4010/api/v1` (запуск: `npx @stoplight/prism-cli mock docs/api/openapi.yaml`)
+- Реальный сервер: `http://localhost:5000/api/v1`
+- Стек: .NET 8, ASP.NET Core Minimal API
+- Аутентификация: JWT Bearer, срок 60 мин, секрет в переменной `JWT_SECRET` (см. `.env.example`)
+- Порядок получения учётных данных:
+  1. `POST /auth/login` с `login`/`password` → получить `token`.
+  2. Передавать в заголовке `Authorization: Bearer <token>`.
+
+### Примеры вызовов
+
+#### Логин
+curl -X POST http://localhost:5000/api/v1/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{"login":"manager","password":"manager123"}'
+
+#### Создание заявки
+curl -X POST http://localhost:5000/api/v1/requests \
+  -H "Authorization: Bearer $TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{"description":"Не включается шпиндель","inspectionMethod":"visit","machineId":1,"priority":2}'
+#### Список с фильтром
+curl "http://localhost:5000/api/v1/requests?status=pending&page=1&limit=20" \
+  -H "Authorization: Bearer $TOKEN"
+
+---
 ## 👩‍💻 Автор
 
 **Диана Владимировна Фролова**
