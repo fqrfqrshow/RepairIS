@@ -233,7 +233,11 @@ paths:
           application/json:
             schema: { $ref: '#/components/schemas/MachineCreate' }
       responses:
-        '200': { description: Обновлено, content: { application/json: { schema: { $ref: '#/components/schemas/Machine' } } } }
+        '200':
+          description: Обновлено
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Machine' }
         '422': { $ref: '#/components/responses/ValidationError' }
     delete:
       summary: Удалить станок
@@ -336,7 +340,6 @@ components:
           type: string
           enum: [pending, in_progress, assigned, completed, paid, closed]
         masterId: { type: integer }
-      required: []
 
     Machine:
       type: object
